@@ -180,21 +180,22 @@
 </head>
 <body class="theme-dashboard">
 
-  <!-- UPFRONT UPLOAD GATEWAY (PDF OR TEXT) -->
+  <!-- UPFRONT MULTI-UPLOAD GATEWAY -->
   <div class="gateway-overlay" id="uploadGateway">
     <div class="gateway-card">
-      <h2 style="color:var(--accent); font-size: 2.2rem;">📄 Upload Study Notes PDF</h2>
-      <p style="font-size: 1.3rem; opacity: 0.85; line-height: 1.3;">Select a PDF document containing your chapters, or paste text/JSON notes below. You can also load the default question bank instantly.</p>
+      <h2 style="color:var(--accent); font-size: 2.2rem;">📄 Upload Multiple Study PDFs</h2>
+      <p style="font-size: 1.3rem; opacity: 0.85; line-height: 1.3;">Select multiple PDF chapters simultaneously (hold Ctrl/Cmd or shift-select), or paste supplemental text below.</p>
       
       <div style="border: 2px dashed var(--border); padding: 1rem; border-radius: 1rem; background: rgba(0,0,0,0.01);">
-        <label style="display:block; margin-bottom:0.5rem; font-weight:700;">Upload PDF File:</label>
-        <input type="file" id="pdfFileInput" accept=".pdf" style="font-size: 1.1rem; width: 100%; cursor: pointer;" onchange="handlePDFUpload(event)">
+        <label style="display:block; margin-bottom:0.5rem; font-weight:700;">Upload PDF Files (Multiple Allowed):</label>
+        <!-- Added multiple attribute -->
+        <input type="file" id="pdfFileInput" accept=".pdf" multiple style="font-size: 1.1rem; width: 100%; cursor: pointer;" onchange="handleMultiplePDFUpload(event)">
       </div>
 
-      <textarea id="gatewayInput" rows="4" style="width:100%; font-size:1.2rem; padding:0.75rem;" placeholder="Or paste extracted text or JSON notes here..."></textarea>
+      <textarea id="gatewayInput" rows="3" style="width:100%; font-size:1.2rem; padding:0.75rem;" placeholder="Or paste extra text / JSON notes here..."></textarea>
       
       <div style="display: flex; gap: 1rem;">
-        <button class="back-btn" style="flex: 1; justify-content: center; padding: 0.6rem;" onclick="initializeWithUpload()">Launch With Custom Data</button>
+        <button class="back-btn" style="flex: 1; justify-content: center; padding: 0.6rem;" onclick="initializeWithUpload()">Launch With All Uploads</button>
         <button style="flex: 1; justify-content: center; padding: 0.6rem; background: var(--border); color: #2c2c2c;" onclick="loadDefaultPool()">Load Default Bank</button>
       </div>
     </div>
@@ -279,31 +280,38 @@
     let activeQuestions = [];
     let isFlipped = false;
 
-    // PDF Uploader handler using PDF.js
-    async function handlePDFUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    // Multiple PDF Uploader handler
+    async function handleMultiplePDFUpload(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
 
-      document.getElementById("gatewayInput").value = "Reading PDF document pages...";
+      const gatewayTextarea = document.getElementById("gatewayInput");
+      gatewayTextarea.value = `Reading ${files.length} selected PDF document(s)...`;
+      
+      let aggregatedText = "";
+
       try {
-        const arrayBuffer = await file.arrayBuffer();
-        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-        const pdfDoc = await loadingTask.promise;
+        for (let f = 0; f < files.length; f++) {
+          const file = files[f];
+          const arrayBuffer = await file.arrayBuffer();
+          const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+          const pdfDoc = await loadingTask.promise;
 
-        let fullText = '';
-        for (let i = 1; i <= pdfDoc.numPages; i++) {
-          const page = await pdfDoc.getPage(i);
-          const textContent = await page.getTextContent();
-          const pageText = textContent.items.map(item => item.str).join(' ');
-          fullText += pageText + '\n';
+          aggregatedText += `\n\n--- [FILE START: ${file.name}] ---\n`;
+          for (let i = 1; i <= pdfDoc.numPages; i++) {
+            const page = await pdfDoc.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            aggregatedText += pageText + '\n';
+          }
         }
 
-        document.getElementById("gatewayInput").value = fullText;
-        alert(`Successfully extracted text from ${pdfDoc.numPages} PDF page(s)! Click "Launch With Custom Data" to start.`);
+        gatewayTextarea.value = aggregatedText.trim();
+        alert(`Successfully extracted text from all ${files.length} PDF file(s)! Click "Launch With All Uploads" to begin.`);
       } catch (err) {
         console.error(err);
-        alert("Error reading PDF file. Please try another file or paste text directly.");
-        document.getElementById("gatewayInput").value = "";
+        alert("Error reading one or more PDF files. Please check file formats.");
+        gatewayTextarea.value = "";
       }
     }
 
@@ -337,8 +345,8 @@
 
     function initializeWithUpload() {
       const rawText = document.getElementById("gatewayInput").value.trim();
-      if (!rawText || rawText === "Reading PDF document pages...") {
-        alert("Please upload a PDF or enter valid text notes.");
+      if (!rawText || rawText.includes("Reading")) {
+        alert("Please upload PDF files or enter valid text notes.");
         return;
       }
 
@@ -359,29 +367,29 @@
           return;
         }
       } catch (e) {
-        // Break down raw text or PDF content into structured review items line by line/paragraph
-        const paragraphs = rawText.split('\n').filter(l => l.trim().length > 20);
+        // Break down bulk uploaded text line by line into quiz segments
+        const paragraphs = rawText.split('\n').filter(l => l.trim().length > 25);
         if (paragraphs.length > 0) {
-          masterQuestions = paragraphs.slice(0, 40).map((para, idx) => ({
+          masterQuestions = paragraphs.slice(0, 60).map((para, idx) => ({
             id: 5000 + idx,
             chapter: (idx % 20) + 1,
-            chapterName: `Uploaded Note Segment ${(idx % 20) + 1}`,
-            topicShort: "PDF Segment",
-            question: `Based on your uploaded notes: "${para.trim().substring(0, 90)}..." — Which compliance action applies?`,
+            chapterName: `Uploaded Document Segment ${(idx % 20) + 1}`,
+            topicShort: "Multi-PDF Data",
+            question: `Based on your loaded files: "${para.trim().substring(0, 90)}..." — Which standard applies?`,
             options: [
-              `Must be fully accounted for under standard operating guidelines.`,
-              `Exempt from all reporting thresholds and schedules.`,
-              `Subject to immediate Section adjustments.`,
-              `Deferred indefinitely until final business dissolution.`
+              `Must be fully accounted for under operational tax compliance guidelines.`,
+              `Exempt from all reporting schedules and limitations.`,
+              `Subject to immediate penalty reclassifications.`,
+              `Deferred indefinitely until final business termination.`
             ],
             answer: 0,
-            explanation: `Derived from uploaded text snippet: ${para.trim().substring(0, 80)}...`
+            explanation: `Derived from multi-file text snippet: ${para.trim().substring(0, 80)}...`
           }));
           completeGatewaySetup();
           return;
         }
       }
-      alert("Could not structure valid notes. Please ensure clear text blocks.");
+      alert("Could not structure valid notes from uploads. Please check text contents.");
     }
 
     function completeGatewaySetup() {
@@ -680,7 +688,7 @@
       }
 
       if (activeQuestions.length === 0) {
-        main.innerHTML = `<div style="text-align:center; padding: 2rem;"><h3>🎉 No Questions Found</h3><p>Please upload a PDF or load default notes.</p></div>`;
+        main.innerHTML = `<div style="text-align:center; padding: 2rem;"><h3>🎉 No Questions Found</h3><p>Please upload multiple PDFs or load default notes.</p></div>`;
         return;
       }
 
