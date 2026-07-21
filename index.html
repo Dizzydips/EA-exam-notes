@@ -3,237 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EA Exam Part 2 - Gamified Study Suite</title>
+  <title>EA Exam Part 2 - Gamified Suite</title>
   <style>
     /* ==========================================================================
-       THEME STYLES (Soft Pink & Sage Green Aesthetic)
+       THEME PALETTES (Soft Pink & Sage Green Foundation)
        ========================================================================== */
     :root {
-      --bg-color: #f7f3f0;
-      --text-color: #2d3732;
-      --accent-color: #87a987;
-      --panel-bg: #ffffff;
-      --panel-border: #e2d7d5;
+      --bg-main: #f7f3f0;
+      --text-main: #2d3732;
+      --accent: #87a987;
+      --card-bg: #ffffff;
+      --border: #e2d7d5;
+      --danger: #d97871;
     }
 
-    /* Millionaire: Soft Rose & Muted Sage */
+    /* Millionaire Theme: Elegant Rose & Gold Accent */
     body.theme-millionaire {
-      --bg-color: #fbeee8;
-      --text-color: #2b332e;
-      --accent-color: #7a9e7e;
-      --panel-bg: #fff8f5;
-      --panel-border: #ebd6ce;
+      --bg-main: #fbeee8;
+      --text-main: #2b332e;
+      --accent: #d4a359;
+      --card-bg: #fffbf7;
+      --border: #ebd6ce;
     }
 
-    /* Detective: Deep Forest Sage & Pastel Blush */
+    /* Detective Theme: Casebook Deep Sage */
     body.theme-detective {
-      --bg-color: #3b4d43;
-      --text-color: #f7f2f0;
-      --accent-color: #f0c3be;
-      --panel-bg: #2d3c33;
-      --panel-border: #4a5e52;
+      --bg-main: #3b4d43;
+      --text-main: #f7f2f0;
+      --accent: #f0c3be;
+      --card-bg: #2d3c33;
+      --border: #4a5e52;
     }
 
-    /* Flashcards: Gentle Sage & Warm Pearl */
+    /* Flashcards Theme: Soft Eucalyptus */
     body.theme-flashcards {
-      --bg-color: #e9f0ec;
-      --text-color: #27332c;
-      --accent-color: #92b496;
-      --panel-bg: #f9fbf9;
-      --panel-border: #d0ded3;
+      --bg-main: #e9f0ec;
+      --text-main: #27332c;
+      --accent: #78a37d;
+      --card-bg: #fdfdfd;
+      --border: #d0ded3;
     }
 
-    /* Matrix: Dusty Rose & Soft Eucalyptus */
+    /* Matrix Theme: Cyber Cyber-Sage & Dusty Pink */
     body.theme-matrix {
-      --bg-color: #f4e9e7;
-      --text-color: #2c3630;
-      --accent-color: #6b8e73;
-      --panel-bg: #fdf8f7;
-      --panel-border: #e5d1cd;
+      --bg-main: #1e2823;
+      --text-main: #e8f0eb;
+      --accent: #a3d9b1;
+      --card-bg: #141c18;
+      --border: #2e3d35;
     }
 
-    /* Basis: Coral Blush & Deep Sage Alert */
+    /* Basis Theme: Compliance Red Alert & Cream */
     body.theme-basis {
-      --bg-color: #f9ecea;
-      --text-color: #332625;
-      --accent-color: #d97871;
-      --panel-bg: #ffffff;
-      --panel-border: #f0c5c1;
+      --bg-main: #f9ecea;
+      --text-main: #332625;
+      --accent: #d97871;
+      --card-bg: #ffffff;
+      --border: #f0c5c1;
     }
 
-    /* ==========================================================================
-       GLOBAL BASE STYLES
-       ========================================================================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: all 0.25s ease; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 1rem; }
 
     header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 2px solid var(--panel-border);
-      margin-bottom: 1.5rem;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      padding-bottom: 1rem; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 1rem;
     }
 
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--accent-color);
-      letter-spacing: 0.5px;
-    }
-
-    .controls-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-    }
+    h1 { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+    .controls-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 
     select, button {
-      background: var(--panel-bg);
-      color: var(--text-color);
-      border: 1.5px solid var(--panel-border);
-      padding: 0.5rem 1rem;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
+      background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border);
+      padding: 0.5rem 1rem; border-radius: 0.6rem; font-weight: 600; cursor: pointer; outline: none;
     }
+    select:focus, button:hover { border-color: var(--accent); }
 
-    select:focus, button:hover {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 10px rgba(135, 169, 135, 0.25);
+    main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 1rem 0; }
+
+    /* ==========================================================================
+       INTERFACE 1: MILLIONAIRE (Ladder + 3 Strikes)
+       ========================================================================== */
+    .millionaire-layout { display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 950px; }
+    .game-panel { flex: 1; min-width: 300px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1rem; padding: 1.5rem; }
+    
+    .ladder-panel {
+      width: 260px; background: var(--card-bg); border: 2px solid var(--border);
+      border-radius: 1rem; padding: 1rem; display: flex; flex-direction: column; gap: 0.25rem;
     }
+    .ladder-step {
+      font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 0.4rem;
+      display: flex; justify-content: space-between; background: rgba(0,0,0,0.02);
+    }
+    .ladder-step.active { background: var(--accent); color: #fff; transform: scale(1.03); }
+    .ladder-step.milestone { border-left: 4px solid var(--accent); }
 
-    button.active {
-      background: var(--accent-color);
-      color: #fff;
-      border-color: var(--accent-color);
+    .strikes-bar { font-size: 1.2rem; margin-bottom: 1rem; font-weight: 800; color: var(--danger); }
+
+    /* ==========================================================================
+       INTERFACE 2: DETECTIVE (Case Folder Style)
+       ========================================================================== */
+    .detective-card {
+      background: var(--card-bg); border: 3px dashed var(--accent); border-radius: 0.5rem;
+      max-width: 650px; width: 100%; padding: 2rem; position: relative; box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+    }
+    .folder-tab {
+      position: absolute; top: -1.5rem; left: 1rem; background: var(--accent); color: #fff;
+      padding: 0.2rem 1rem; font-size: 0.8rem; font-weight: 700; border-radius: 0.4rem 0.4rem 0 0;
     }
 
     /* ==========================================================================
-       MAIN CONTAINER & GAME CARD STYLES
+       INTERFACE 3: MATRIX (Cyber Grid + Health Bar)
        ========================================================================== */
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .matrix-card {
+      background: var(--card-bg); border: 1px solid var(--accent); border-radius: 0.5rem;
+      max-width: 700px; width: 100%; padding: 1.5rem; box-shadow: 0 0 15px rgba(163, 217, 177, 0.15);
     }
+    .matrix-header { display: flex; justify-content: space-between; font-family: monospace; margin-bottom: 1rem; font-size: 0.9rem; }
 
-    .card {
-      background: var(--panel-bg);
-      border: 2px solid var(--panel-border);
-      border-radius: 1.25rem;
-      width: 100%;
-      max-width: 650px;
-      padding: 2rem;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
-      text-align: center;
-    }
-
-    .card-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.35rem 0.85rem;
-      border-radius: 1rem;
-      background: rgba(135, 169, 135, 0.15);
-      color: var(--accent-color);
-      margin-bottom: 1rem;
-    }
-
-    .question-text {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .options-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-    }
-
-    .option-btn {
-      text-align: left;
-      width: 100%;
-      padding: 0.85rem 1.2rem;
-      background: rgba(0, 0, 0, 0.02);
-      border: 1.5px solid var(--panel-border);
-      border-radius: 0.75rem;
-      font-size: 1rem;
-    }
-
-    .option-btn:hover {
-      background: rgba(135, 169, 135, 0.1);
-    }
-
-    .feedback {
-      margin-top: 1.5rem;
-      font-weight: 700;
-      min-height: 1.5rem;
+    /* ==========================================================================
+       INTERFACE 4: BASIS ALERT (Compliance Notification)
+       ========================================================================== */
+    .basis-card {
+      background: var(--card-bg); border-top: 6px solid var(--danger); border-radius: 0.5rem;
+      max-width: 650px; width: 100%; padding: 2rem; box-shadow: 0 10px 25px rgba(217, 120, 113, 0.15);
     }
 
     /* ==========================================================================
-       FLASHCARD SPECIFIC STYLES
+       COMMON OPTION BUTTONS & FEEDBACK
        ========================================================================== */
-    .flashcard-inner {
-      min-height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      cursor: pointer;
-    }
-
-    .action-btn {
-      margin-top: 1.5rem;
-      background: var(--accent-color);
-      color: #ffffff;
-      width: 100%;
-    }
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 1.25rem; }
+    .option-btn { text-align: left; width: 100%; padding: 0.85rem 1.2rem; border-radius: 0.6rem; font-size: 0.95rem; }
+    .option-btn:hover { border-color: var(--accent); background: rgba(0,0,0,0.03); }
+    .feedback { margin-top: 1.25rem; font-weight: 700; min-height: 1.5rem; }
   </style>
 </head>
 <body class="theme-millionaire">
 
   <header>
     <h1>EA Exam Suite: Part 2</h1>
-    
     <div class="controls-bar">
-      <!-- Mode / Theme Switcher -->
-      <label for="modeSelect">Mode:</label>
+      <label for="modeSelect">Game Mode:</label>
       <select id="modeSelect" onchange="switchMode(this.value)">
-        <option value="millionaire">Millionaire Mode</option>
-        <option value="detective">Detective Mode</option>
-        <option value="flashcards">Flashcards</option>
-        <option value="matrix">Matrix Mode</option>
-        <option value="basis">Basis Alert</option>
+        <option value="millionaire">Millionaire Ladder</option>
+        <option value="detective">Detective Casebook</option>
+        <option value="flashcards">Flashcard Deck</option>
+        <option value="matrix">Matrix Terminal</option>
+        <option value="basis">Basis Tax Alert</option>
       </select>
 
-      <!-- Domain / Chapter Selector -->
-      <label for="domainSelect">Topic:</label>
+      <label for="domainSelect">Chapter:</label>
       <select id="domainSelect" onchange="filterTopic(this.value)">
-        <option value="all">All Domains</option>
+        <option value="all">All Chapters (Randomized)</option>
         <option value="domain1">Domain 1: Entities</option>
         <option value="domain2">Domain 2: Tax Prep & Expenses</option>
         <option value="domain3">Domain 3: Specialized Returns</option>
@@ -241,216 +162,263 @@
     </div>
   </header>
 
-  <main>
-    <div class="card" id="gameCard">
-      <span class="card-tag" id="domainTag">Domain 1: Business Entities</span>
-      <div id="contentArea">
-        <!-- Dynamic Game Content Loads Here -->
-      </div>
-      <div class="feedback" id="feedback"></div>
-    </div>
+  <main id="mainContainer">
+    <!-- Dynamic Interface Injected Here -->
   </main>
 
   <script>
     /* ==========================================================================
-       1. QUESTION DATABASE & DATA STRUCTURES
+       1. QUESTION DATABASE
        ========================================================================== */
     const questionsDatabase = [
       {
-        id: 1,
-        domain: "domain1",
-        domainName: "Domain 1: Business Entities",
-        question: "What is the general tax treatment of a liquidating distribution to a C-Corporation shareholder?",
-        options: [
-          "Tax-free return of basis only",
-          "Treated as full payment in exchange for the stock (Capital Gain/Loss)",
-          "Taxed completely as ordinary dividend income",
-          "Deferred until the assets are resold"
-        ],
-        answer: 1,
-        explanation: "Liquidating distributions to shareholders are treated as full payment in exchange for their stock under Section 331."
+        id: 1, domain: "domain1", domainName: "Domain 1: Entities",
+        question: "What is the tax treatment of a liquidating distribution to a C-Corp shareholder?",
+        options: ["Tax-free return of basis", "Full payment in exchange for stock (Capital Gain/Loss)", "Ordinary dividend income", "Deferred gain"],
+        answer: 1, explanation: "Liquidating distributions are treated as stock exchanges under Sec. 331."
       },
       {
-        id: 2,
-        domain: "domain2",
-        domainName: "Domain 2: Tax Prep & Expenses",
+        id: 2, domain: "domain2", domainName: "Domain 2: Tax Prep",
         question: "Under MACRS 5-year property rules, which asset qualifies?",
-        options: [
-          "Office Furniture",
-          "Automobiles & Light Duty Trucks",
-          "Residential Rental Real Estate",
-          "Nonresidential Real Property"
-        ],
-        answer: 1,
-        explanation: "Automobiles, taxis, buses, and light-duty trucks are classified as 5-year property under MACRS."
+        options: ["Office Furniture", "Automobiles & Light Trucks", "Residential Rental Property", "Nonresidential Real Estate"],
+        answer: 1, explanation: "Automobiles and light trucks fall into the MACRS 5-year class."
       },
       {
-        id: 3,
-        domain: "domain3",
-        domainName: "Domain 3: Specialized Returns",
-        question: "Which form is used by tax-exempt organizations to file their annual information return?",
-        options: [
-          "Form 1041",
-          "Form 1120-S",
-          "Form 990",
-          "Form 1065"
-        ],
-        answer: 2,
-        explanation: "Tax-exempt organizations under Section 501(c) file Form 990 to report activities and financial status."
+        id: 3, domain: "domain3", domainName: "Domain 3: Specialized Returns",
+        question: "Which form does a tax-exempt 501(c)(3) organization use for annual filing?",
+        options: ["Form 1041", "Form 1120-S", "Form 990", "Form 1065"],
+        answer: 2, explanation: "Form 990 is the annual information return for exempt organizations."
+      },
+      {
+        id: 4, domain: "domain1", domainName: "Domain 1: Entities",
+        question: "What is the maximum number of shareholders an S-Corporation can have?",
+        options: ["50", "75", "100", "Unlimited"],
+        answer: 2, explanation: "An S-Corporation cannot have more than 100 eligible shareholders."
       }
     ];
+
+    const prizeMoney = ["$100", "$200", "$300", "$500", "$1,000", "$2,000", "$4,000", "$8,000", "$16,000", "$32,000", "$64,000", "$125,000", "$250,000", "$500,000", "$1,000,000"];
 
     let currentMode = "millionaire";
     let currentDomain = "all";
     let currentIndex = 0;
-    let filteredQuestions = [...questionsDatabase];
+    let strikes = 3;
+    let activeQuestions = [];
     let isFlipped = false;
 
     /* ==========================================================================
-       2. BUILT-IN WEB AUDIO SYNTHESIZER
+       2. RANDOMIZER & SOUND SYNTHESIZER
        ========================================================================== */
+    function shuffleArray(array) {
+      let arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
 
       if (type === 'correct') {
-        // High Fanfare Chime
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
-        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-        osc.start(now);
-        osc.stop(now + 0.4);
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+
+      } else if (type === 'clap') {
+        // Synthesized Crowd Applause
+        for (let i = 0; i < 8; i++) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200 + Math.random() * 400, now + i * 0.05);
+          gain.gain.setValueAtTime(0.08, now + i * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.05 + 0.1);
+          osc.start(now + i * 0.05); osc.stop(now + i * 0.05 + 0.1);
+        }
 
       } else if (type === 'wrong') {
-        // Low Suspense Buzz
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.3);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
 
       } else if (type === 'drumroll') {
-        // Suspense Drumroll Tone
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(100, now);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
+        osc.frequency.setValueAtTime(110, now);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
       }
     }
 
     /* ==========================================================================
-       3. APPLICATION LOGIC & RENDERING
+       3. CONTROLLER & VIEW RENDERERS
        ========================================================================== */
+    function filterTopic(domain) {
+      currentDomain = domain;
+      let raw = domain === "all" ? questionsDatabase : questionsDatabase.filter(q => q.domain === domain);
+      activeQuestions = shuffleArray(raw);
+      currentIndex = 0;
+      strikes = 3;
+      render();
+    }
+
     function switchMode(mode) {
       currentMode = mode;
       document.body.className = `theme-${mode}`;
-      currentIndex = 0;
-      renderCurrentView();
+      filterTopic(currentDomain);
     }
 
-    function filterTopic(domain) {
-      currentDomain = domain;
-      if (domain === "all") {
-        filteredQuestions = [...questionsDatabase];
-      } else {
-        filteredQuestions = questionsDatabase.filter(q => q.domain === domain);
-      }
-      currentIndex = 0;
-      renderCurrentView();
-    }
-
-    function renderCurrentView() {
-      const contentArea = document.getElementById("contentArea");
-      const domainTag = document.getElementById("domainTag");
-      const feedback = document.getElementById("feedback");
-      feedback.innerHTML = "";
-
-      if (filteredQuestions.length === 0) {
-        domainTag.innerText = "No Questions";
-        contentArea.innerHTML = "<p class='question-text'>No questions available for this topic filter.</p>";
+    function render() {
+      const main = document.getElementById("mainContainer");
+      if (activeQuestions.length === 0) {
+        main.innerHTML = `<p>No questions found for this topic.</p>`;
         return;
       }
 
-      const q = filteredQuestions[currentIndex];
-      domainTag.innerText = q.domainName;
+      const q = activeQuestions[currentIndex];
 
-      if (currentMode === "flashcards") {
-        isFlipped = false;
-        contentArea.innerHTML = `
-          <div class="flashcard-inner" onclick="flipCard()">
-            <p class="question-text" id="cardText">${q.question}</p>
+      if (currentMode === "millionaire") {
+        main.innerHTML = `
+          <div class="millionaire-layout">
+            <div class="game-panel">
+              <div class="strikes-bar">STRIKES: ${"❌".repeat(3 - strikes)}${"🔴".repeat(strikes)}</div>
+              <h3>${q.domainName}</h3>
+              <p style="margin-top: 1rem; font-size: 1.1rem; font-weight: 600;">${q.question}</p>
+              <div class="options-grid">
+                ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}
+              </div>
+              <div class="feedback" id="fb"></div>
+            </div>
+            <div class="ladder-panel">
+              <h4 style="margin-bottom:0.5rem; text-align:center;">PRIZE LADDER</h4>
+              ${prizeMoney.map((m, idx) => `
+                <div class="ladder-step ${idx === currentIndex ? 'active' : ''} ${idx % 5 === 4 ? 'milestone' : ''}">
+                  <span>${idx + 1}</span><span>${m}</span>
+                </div>
+              `).reverse().join('')}
+            </div>
           </div>
-          <button class="action-btn" onclick="nextCard()">Next Card</button>
         `;
-      } else {
-        // Quiz / Game Modes
-        contentArea.innerHTML = `
-          <p class="question-text">${q.question}</p>
-          <div class="options-grid">
-            ${q.options.map((opt, idx) => `
-              <button class="option-btn" onclick="handleAnswer(${idx})">${opt}</button>
-            `).join('')}
+      } else if (currentMode === "detective") {
+        main.innerHTML = `
+          <div class="detective-card">
+            <div class="folder-tab">CASE FILE #${q.id}</div>
+            <h3>🕵️ SUSPECT EVIDENCE: ${q.domainName}</h3>
+            <p style="margin-top: 1rem; font-size: 1.1rem;">"${q.question}"</p>
+            <div class="options-grid">
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Inspect Option: ${opt}</button>`).join('')}
+            </div>
+            <div class="feedback" id="fb"></div>
+          </div>
+        `;
+      } else if (currentMode === "matrix") {
+        main.innerHTML = `
+          <div class="matrix-card">
+            <div class="matrix-header">
+              <span>SYSTEM LOG: RUNNING...</span>
+              <span>FIREWALL INTEGRITY: ${"🛡️".repeat(strikes)}</span>
+            </div>
+            <p style="font-family: monospace; font-size: 1.1rem;">> ${q.question}</p>
+            <div class="options-grid">
+              ${q.options.map((opt, i) => `<button class="option-btn" style="font-family: monospace;" onclick="handleAnswer(${i})">[EXECUTE] ${opt}</button>`).join('')}
+            </div>
+            <div class="feedback" id="fb"></div>
+          </div>
+        `;
+      } else if (currentMode === "flashcards") {
+        isFlipped = false;
+        main.innerHTML = `
+          <div class="game-panel" style="max-width:550px; text-align:center; cursor:pointer;" onclick="flip()">
+            <span style="font-size:0.8rem; font-weight:700; color:var(--accent);">${q.domainName}</span>
+            <div id="cardContent" style="min-height:160px; display:flex; align-items:center; justify-content:center; margin-top:1rem;">
+              <p style="font-size:1.2rem; font-weight:600;">${q.question}</p>
+            </div>
+            <button class="option-btn" style="margin-top:1rem; text-align:center;" onclick="event.stopPropagation(); nextFC();">Next Flashcard ➔</button>
+          </div>
+        `;
+      } else if (currentMode === "basis") {
+        main.innerHTML = `
+          <div class="basis-card">
+            <h3 style="color:var(--danger);">⚠️ URGENT TAX AUDIT COMPLIANCE ALERT</h3>
+            <p style="margin-top: 0.8rem; font-weight:600;">${q.question}</p>
+            <div class="options-grid">
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}
+            </div>
+            <div class="feedback" id="fb"></div>
           </div>
         `;
       }
     }
 
-    function handleAnswer(selectedIndex) {
-      const q = filteredQuestions[currentIndex];
-      const feedback = document.getElementById("feedback");
-
+    function handleAnswer(idx) {
+      const q = activeQuestions[currentIndex];
+      const fb = document.getElementById("fb");
       playSound('drumroll');
 
       setTimeout(() => {
-        if (selectedIndex === q.answer) {
+        if (idx === q.answer) {
           playSound('correct');
-          feedback.style.color = "var(--accent-color)";
-          feedback.innerHTML = `✓ Correct! ${q.explanation}`;
+          playSound('clap');
+          fb.style.color = "var(--accent)";
+          fb.innerHTML = `✓ Correct! ${q.explanation}`;
+          setTimeout(() => {
+            currentIndex = (currentIndex + 1) % activeQuestions.length;
+            render();
+          }, 1800);
         } else {
           playSound('wrong');
-          feedback.style.color = "#d97871";
-          feedback.innerHTML = `✗ Incorrect. Try again!`;
+          strikes--;
+          fb.style.color = "var(--danger)";
+          if (strikes <= 0) {
+            fb.innerHTML = `💥 3 STRIKES! Game Over. Restarting Chapter...`;
+            setTimeout(() => { filterTopic(currentDomain); }, 2000);
+          } else {
+            fb.innerHTML = `❌ Incorrect. ${strikes} strike(s) remaining!`;
+          }
         }
       }, 150);
     }
 
-    function flipCard() {
-      const q = filteredQuestions[currentIndex];
-      const cardText = document.getElementById("cardText");
+    function flip() {
+      const q = activeQuestions[currentIndex];
+      const cardContent = document.getElementById("cardContent");
       playSound('drumroll');
-      
       isFlipped = !isFlipped;
       if (isFlipped) {
-        cardText.innerHTML = `<strong style="color: var(--accent-color)">Answer:</strong><br>${q.options[q.answer]}<br><br><small>${q.explanation}</small>`;
+        cardContent.innerHTML = `<div><strong style="color:var(--accent);">ANSWER:</strong><br>${q.options[q.answer]}<br><br><small>${q.explanation}</small></div>`;
       } else {
-        cardText.innerText = q.question;
+        cardContent.innerHTML = `<p style="font-size:1.2rem; font-weight:600;">${q.question}</p>`;
       }
     }
 
-    function nextCard() {
-      currentIndex = (currentIndex + 1) % filteredQuestions.length;
-      renderCurrentView();
+    function nextFC() {
+      currentIndex = (currentIndex + 1) % activeQuestions.length;
+      render();
     }
 
-    // Initialize App
-    renderCurrentView();
+    // Initialize First Load
+    filterTopic("all");
   </script>
 </body>
 </html>
