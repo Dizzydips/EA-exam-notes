@@ -1,496 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gleim EA Part 2 Mastery Suite</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- React and ReactDOM CDNs -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  
-  <!-- Babel Compiler for JSX support in browser -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EA Exam Part 2 - Gamified Study Suite</title>
+  <style>
+    /* ==========================================================================
+       THEME STYLES (Dynamic Classes Applied to <body>)
+       ========================================================================== */
+    :root {
+      --bg-color: #0b0f19;
+      --text-color: #f3f4f6;
+      --accent-color: #a855f7;
+      --panel-bg: #111827;
+      --panel-border: #1f2937;
+    }
+
+    /* Millionaire: Deep Obsidian & Neon Gold */
+    body.theme-millionaire {
+      --bg-color: #030712;
+      --text-color: #fffbeb;
+      --accent-color: #ffd700;
+      --panel-bg: #0f172a;
+      --panel-border: #334155;
+    }
+
+    /* Detective: Dark Cyber Emerald & Midnight Slate */
+    body.theme-detective {
+      --bg-color: #022c22;
+      --text-color: #ecfdf5;
+      --accent-color: #00ff9d;
+      --panel-bg: #064e3b;
+      --panel-border: #047857;
+    }
+
+    /* Flashcards: Electric Purple & Deep Indigo */
+    body.theme-flashcards {
+      --bg-color: #0f172a;
+      --text-color: #f8fafc;
+      --accent-color: #a855f7;
+      --panel-bg: #1e1b4b;
+      --panel-border: #312e81;
+    }
+
+    /* Matrix: Cyberpunk Blue & Navy */
+    body.theme-matrix {
+      --bg-color: #050b14;
+      --text-color: #e0f2fe;
+      --accent-color: #00f2ff;
+      --panel-bg: #0a192f;
+      --panel-border: #1e3a8a;
+    }
+
+    /* Basis: Crimson Red & Dark Amber */
+    body.theme-basis {
+      --bg-color: #1a0505;
+      --text-color: #fef2f2;
+      --accent-color: #ff3b30;
+      --panel-bg: #2e0808;
+      --panel-border: #7f1d1d;
+    }
+
+    /* ==========================================================================
+       GLOBAL BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--panel-border);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent-color);
+      letter-spacing: 0.5px;
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    select, button {
+      background: var(--panel-bg);
+      color: var(--text-color);
+      border: 1px solid var(--panel-border);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus, button:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    button.active {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & GAME CARD STYLES
+       ========================================================================== */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 650px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .option-btn {
+      text-align: left;
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--panel-border);
+      font-size: 1rem;
+    }
+
+    .option-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .feedback {
+      margin-top: 1.5rem;
+      font-weight: 700;
+      min-height: 1.5rem;
+    }
+
+    /* ==========================================================================
+       FLASHCARD SPECIFIC STYLES
+       ========================================================================== */
+    .flashcard-inner {
+      min-height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .action-btn {
+      margin-top: 1.5rem;
+      background: var(--accent-color);
+      color: #000;
+      width: 100%;
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans">
+<body class="theme-millionaire">
 
-  <div id="root"></div>
+  <header>
+    <h1>EA Exam Suite: Part 2</h1>
+    
+    <div class="controls-bar">
+      <!-- Mode / Theme Switcher -->
+      <label for="modeSelect">Mode:</label>
+      <select id="modeSelect" onchange="switchMode(this.value)">
+        <option value="millionaire">Millionaire Mode</option>
+        <option value="detective">Detective Mode</option>
+        <option value="flashcards">Flashcards</option>
+        <option value="matrix">Matrix Mode</option>
+        <option value="basis">Basis Alert</option>
+      </select>
 
-  <!-- React Application Script -->
-  <script type="text/babel">
-    const { useState, useMemo } = React;
+      <!-- Domain / Chapter Selector -->
+      <label for="domainSelect">Topic:</label>
+      <select id="domainSelect" onchange="filterTopic(this.value)">
+        <option value="all">All Domains</option>
+        <option value="domain1">Domain 1: Entities</option>
+        <option value="domain2">Domain 2: Tax Prep & Expenses</option>
+        <option value="domain3">Domain 3: Specialized Returns</option>
+      </select>
+    </div>
+  </header>
 
-    // --- STUDY UNITS DATA (SU 1 to SU 20) ---
-    const STUDY_UNITS = [
-      { id: 1, title: "SU 1: Entity Types, Methods & Periods", category: "Entities" },
-      { id: 2, title: "SU 2: Business Income, Expenses & Losses", category: "Income & Deductions" },
-      { id: 3, title: "SU 3: Business Assets & Depreciation (MACRS/§179)", category: "Assets" },
-      { id: 4, title: "SU 4: Sales, Exchanges & Property Basis", category: "Assets" },
-      { id: 5, title: "SU 5: Partnership Formation & Operations", category: "Partnerships" },
-      { id: 6, title: "SU 6: Partnership Distributions & Liquidations", category: "Partnerships" },
-      { id: 7, title: "SU 7: C Corporation Formation & Taxes", category: "C Corporations" },
-      { id: 8, title: "SU 8: C Corp Distributions & Liquidations", category: "C Corporations" },
-      { id: 9, title: "SU 9: S Corporation Elections & Operations", category: "S Corporations" },
-      { id: 10, title: "SU 10: S Corp Distributions, Basis & Termination", category: "S Corporations" },
-      { id: 11, title: "SU 11: Sole Proprietorships & Schedule C", category: "Sole Proprietors" },
-      { id: 12, title: "SU 12: Farming Income & Expenses (Schedule F)", category: "Special Taxpayers" },
-      { id: 13, title: "SU 13: Tax-Exempt Organizations", category: "Special Entities" },
-      { id: 14, title: "SU 14: Estates & Fiduciary Tax (Form 1041)", category: "Trusts & Estates" },
-      { id: 15, title: "SU 15: Qualified Retirement Plans & Compensation", category: "Payroll & Benefits" },
-      { id: 16, title: "SU 16: Employment Taxes & Worker Classification", category: "Payroll & Benefits" },
-      { id: 17, title: "SU 17: Business Tax Credits (General Business Credit)", category: "Credits" },
-      { id: 18, title: "SU 18: International Tax & Special Entities", category: "Special Entities" },
-      { id: 19, title: "SU 19: Accounting Adjustments & Method Changes", category: "Accounting Rules" },
-      { id: 20, title: "SU 20: Specialized Returns & Filings", category: "Compliance" },
-    ];
+  <main>
+    <div class="card" id="gameCard">
+      <span class="card-tag" id="domainTag">Domain 1: Business Entities</span>
+      <div id="contentArea">
+        <!-- Dynamic Game Content Loads Here -->
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </main>
 
-    // --- QUESTION BANK COVERING ALL UNITS ---
-    const INITIAL_QUESTIONS = [
+  <script>
+    /* ==========================================================================
+       1. QUESTION DATABASE & DATA STRUCTURES
+       ========================================================================== */
+    const questionsDatabase = [
       {
-        id: 101,
-        unitId: 1,
-        question: "Under the gross receipts test for small business exceptions (e.g., cash method eligibility), what is the maximum 3-year average annual gross receipts threshold?",
-        options: ["$10 million", "$25 million", "$29 million", "$31 million"],
-        correctIndex: 3,
-        explanation: "For the gross receipts test, small business entities qualify if their 3-year average annual gross receipts are $31 million or less."
-      },
-      {
-        id: 102,
-        unitId: 1,
-        question: "Which form is used by an eligible entity to elect its federal classification under the 'Check-the-Box' regulations?",
-        options: ["Form 1120", "Form 8832", "Form 2553", "Form 1065"],
-        correctIndex: 1,
-        explanation: "Form 8832 (Entity Classification Election) is used to select or change entity classification. Form 2553 is strictly for S corporation elections."
-      },
-      {
-        id: 201,
-        unitId: 2,
-        question: "What is the general limit on business meals deduction incurred during normal trade or business operations?",
-        options: ["0%", "50%", "80%", "100%"],
-        correctIndex: 1,
-        explanation: "Business meals with clients or employees remain 50% deductible, provided they are not lavish or extravagant under the circumstances."
-      },
-      {
-        id: 301,
-        unitId: 3,
-        question: "Under MACRS, what is the standard recovery period for light general-purpose trucks and computers?",
-        options: ["3 years", "5 years", "7 years", "15 years"],
-        correctIndex: 1,
-        explanation: "Computers, light general-purpose trucks, and automobiles are classified as 5-year property under MACRS."
-      },
-      {
-        id: 501,
-        unitId: 5,
-        question: "When a partner contributes property with liabilities in excess of basis to a newly formed partnership, how is the gain recognized?",
+        id: 1,
+        domain: "domain1",
+        domainName: "Domain 1: Business Entities",
+        question: "What is the general tax treatment of a liquidating distribution to a C-Corporation shareholder?",
         options: [
-          "No gain is ever recognized upon formation.",
-          "Gain is recognized to the extent net liability relief exceeds the partner's adjusted basis.",
-          "Gain is fully taxed as ordinary income regardless of basis.",
-          "The excess liability is distributed to all other partners as dividend income."
+          "Tax-free return of basis only",
+          "Treated as full payment in exchange for the stock (Capital Gain/Loss)",
+          "Taxed completely as ordinary dividend income",
+          "Deferred until the assets are resold"
         ],
-        correctIndex: 1,
-        explanation: "Under §731/§752, if the net reduction in liabilities exceeds the partner's basis in the contributed property, the partner recognizes capital gain."
+        answer: 1,
+        explanation: "Liquidating distributions to shareholders are treated as full payment in exchange for their stock under Section 331."
       },
       {
-        id: 701,
-        unitId: 7,
-        question: "What is the filing deadline for a calendar-year C Corporation tax return (Form 1120)?",
+        id: 2,
+        domain: "domain2",
+        domainName: "Domain 2: Tax Prep & Expenses",
+        question: "Under MACRS 5-year property rules, which asset qualifies?",
         options: [
-          "15th day of the 3rd month (March 15)",
-          "15th day of the 4th month (April 15)",
-          "15th day of the 9th month (September 15)",
-          "31st day of December"
+          "Office Furniture",
+          "Automobiles & Light Duty Trucks",
+          "Residential Rental Real Estate",
+          "Nonresidential Real Property"
         ],
-        correctIndex: 1,
-        explanation: "For calendar-year C Corporations, Form 1120 is due on April 15 (the 15th day of the 4th month following the close of the tax year)."
+        answer: 1,
+        explanation: "Automobiles, taxis, buses, and light-duty trucks are classified as 5-year property under MACRS."
       },
       {
-        id: 901,
-        unitId: 9,
-        question: "What is the maximum number of allowable shareholders in an S Corporation?",
-        options: ["50", "75", "100", "500"],
-        correctIndex: 2,
-        explanation: "An S Corporation cannot have more than 100 shareholders (family members can elect to be treated as 1 shareholder)."
-      },
-      {
-        id: 1101,
-        unitId: 11,
-        question: "Where does a sole proprietor report self-employment tax liability on Form 1040?",
-        options: ["Schedule C", "Schedule SE", "Schedule E", "Form 4562"],
-        correctIndex: 1,
-        explanation: "Net profit flows from Schedule C to Schedule SE to compute the self-employment tax."
-      },
-      {
-        id: 1401,
-        unitId: 14,
-        question: "What is the annual income exemption threshold for a simple trust on Form 1041?",
-        options: ["$100", "$300", "$600", "$1,000"],
-        correctIndex: 1,
-        explanation: "A simple trust gets a $300 exemption. Complex trusts receive a $100 exemption, and estates receive $600."
+        id: 3,
+        domain: "domain3",
+        domainName: "Domain 3: Specialized Returns",
+        question: "Which form is used by tax-exempt organizations to file their annual information return?",
+        options: [
+          "Form 1041",
+          "Form 1120-S",
+          "Form 990",
+          "Form 1065"
+        ],
+        answer: 2,
+        explanation: "Tax-exempt organizations under Section 501(c) file Form 990 to report activities and financial status."
       }
     ];
 
-    function EAPart2StudyApp() {
-      const [activeTab, setActiveTab] = useState("practice"); // "practice" | "analytics" | "notes"
-      const [selectedUnitId, setSelectedUnitId] = useState(1); // 1 through 20
-      const [userStats, setUserStats] = useState({}); 
+    let currentMode = "millionaire";
+    let currentDomain = "all";
+    let currentIndex = 0;
+    let filteredQuestions = [...questionsDatabase];
+    let isFlipped = false;
 
-      const [currentQIndex, setCurrentQIndex] = useState(0);
-      const [selectedOption, setSelectedOption] = useState(null);
-      const [showAnswer, setShowAnswer] = useState(false);
+    /* ==========================================================================
+       2. BUILT-IN WEB AUDIO SYNTHESIZER
+       ========================================================================== */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-      // Filter questions for current selected unit
-      const activeQuestions = useMemo(() => {
-        const list = INITIAL_QUESTIONS.filter(q => q.unitId === selectedUnitId);
-        return list.length > 0 ? list : [{
-          id: 999,
-          unitId: selectedUnitId,
-          question: `Sample Question for Unit ${selectedUnitId}: What is a core rule covered under this study unit?`,
-          options: ["Rule Option A", "Rule Option B", "Rule Option C", "Rule Option D"],
-          correctIndex: 0,
-          explanation: `Detailed explanation for SU ${selectedUnitId} core concepts.`
-        }];
-      }, [selectedUnitId]);
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
 
-      const currentQuestion = activeQuestions[currentQIndex % activeQuestions.length];
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-      // Handle Answer Selection
-      const handleAnswerSubmit = (optionIndex) => {
-        if (showAnswer) return;
-        setSelectedOption(optionIndex);
-        setShowAnswer(true);
+      const now = audioCtx.currentTime;
 
-        const isCorrect = optionIndex === currentQuestion.correctIndex;
+      if (type === 'correct') {
+        // High Fanfare Chime
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
 
-        setUserStats(prev => {
-          const uStats = prev[selectedUnitId] || { correct: 0, total: 0 };
-          return {
-            ...prev,
-            [selectedUnitId]: {
-              correct: uStats.correct + (isCorrect ? 1 : 0),
-              total: uStats.total + 1
-            }
-          };
-        });
-      };
+      } else if (type === 'wrong') {
+        // Low Suspense Buzz
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
 
-      const handleNextQuestion = () => {
-        setSelectedOption(null);
-        setShowAnswer(false);
-        setCurrentQIndex(prev => prev + 1);
-      };
-
-      // Weak Area Analytics Calculation
-      const unitAnalytics = useMemo(() => {
-        return STUDY_UNITS.map(unit => {
-          const stats = userStats[unit.id] || { correct: 0, total: 0 };
-          const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : null;
-          return {
-            ...unit,
-            correct: stats.correct,
-            total: stats.total,
-            percentage,
-            isWeak: percentage !== null && percentage < 70
-          };
-        });
-      }, [userStats]);
-
-      const overallAccuracy = useMemo(() => {
-        let totalC = 0;
-        let totalA = 0;
-        Object.values(userStats).forEach(s => {
-          totalC += s.correct;
-          totalA += s.total;
-        });
-        return totalA > 0 ? Math.round((totalC / totalA) * 100) : 0;
-      }, [userStats]);
-
-      return (
-        <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8 font-sans">
-          {/* Header */}
-          <header className="max-w-6xl mx-auto mb-8 border-b border-slate-800 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-blue-400">Gleim EA Part 2 Mastery Suite</h1>
-              <p className="text-slate-400 text-sm">Businesses, Entities & Tax Rules (Study Units 1 - 20)</p>
-            </div>
-            
-            {/* Navigation Tabs */}
-            <div className="flex bg-slate-800 p-1 rounded-lg border border-slate-700">
-              <button
-                onClick={() => setActiveTab("practice")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'practice' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
-              >
-                Practice Quiz
-              </button>
-              <button
-                onClick={() => setActiveTab("analytics")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'analytics' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
-              >
-                Weak Area Diagnostics
-              </button>
-              <button
-                onClick={() => setActiveTab("notes")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'notes' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
-              >
-                Study Notes (1-20)
-              </button>
-            </div>
-          </header>
-
-          <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
-            
-            {/* Sidebar: Chapter / Study Unit Selector (1 - 20) */}
-            <aside className="lg:col-span-1 bg-slate-800 border border-slate-700 rounded-xl p-4 max-h-[75vh] overflow-y-auto">
-              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Study Units (1 - 20)</h2>
-              <div className="space-y-1">
-                {unitAnalytics.map(unit => {
-                  const isActive = selectedUnitId === unit.id;
-                  return (
-                    <button
-                      key={unit.id}
-                      onClick={() => {
-                        setSelectedUnitId(unit.id);
-                        setCurrentQIndex(0);
-                        setSelectedOption(null);
-                        setShowAnswer(false);
-                      }}
-                      className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-between ${
-                        isActive 
-                          ? 'bg-blue-600/20 text-blue-300 border border-blue-500/50' 
-                          : 'hover:bg-slate-700/50 text-slate-300'
-                      }`}
-                    >
-                      <span className="truncate pr-2">{unit.title}</span>
-                      {unit.percentage !== null ? (
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] ${unit.percentage >= 70 ? 'bg-emerald-900/60 text-emerald-300' : 'bg-rose-900/60 text-rose-300'}`}>
-                          {unit.percentage}%
-                        </span>
-                      ) : (
-                        <span className="text-slate-500 text-[10px]">—</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </aside>
-
-            {/* Main Content Area */}
-            <section className="lg:col-span-3">
-
-              {/* TAB 1: PRACTICE QUIZ */}
-              {activeTab === 'practice' && (
-                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
-                  <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-6">
-                    <div>
-                      <span className="text-xs text-blue-400 font-semibold uppercase">Active Chapter</span>
-                      <h2 className="text-lg font-bold text-white">
-                        {STUDY_UNITS.find(u => u.id === selectedUnitId)?.title}
-                      </h2>
-                    </div>
-                    <span className="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded-full">
-                      Question {(currentQIndex % activeQuestions.length) + 1} of {activeQuestions.length}
-                    </span>
-                  </div>
-
-                  {/* Question Text */}
-                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
-                    {currentQuestion.question}
-                  </p>
-
-                  {/* Options */}
-                  <div className="space-y-3 mb-6">
-                    {currentQuestion.options.map((opt, idx) => {
-                      let btnStyle = "bg-slate-700/50 hover:bg-slate-700 text-slate-200 border-slate-600";
-                      if (showAnswer) {
-                        if (idx === currentQuestion.correctIndex) {
-                          btnStyle = "bg-emerald-900/40 text-emerald-200 border-emerald-500 font-semibold";
-                        } else if (idx === selectedOption) {
-                          btnStyle = "bg-rose-900/40 text-rose-200 border-rose-500";
-                        } else {
-                          btnStyle = "bg-slate-800 text-slate-500 border-slate-700 opacity-50";
-                        }
-                      }
-
-                      return (
-                        <button
-                          key={idx}
-                          disabled={showAnswer}
-                          onClick={() => handleAnswerSubmit(idx)}
-                          className={`w-full text-left p-4 rounded-lg border text-sm transition flex items-center gap-3 ${btnStyle}`}
-                        >
-                          <span className="w-6 h-6 rounded-full border border-current flex items-center justify-center text-xs font-bold shrink-0">
-                            {String.fromCharCode(65 + idx)}
-                          </span>
-                          <span>{opt}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Explanation & Next */}
-                  {showAnswer && (
-                    <div className="mt-6 p-4 rounded-lg bg-slate-900/80 border border-slate-700 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <span className={`font-bold text-sm ${selectedOption === currentQuestion.correctIndex ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {selectedOption === currentQuestion.correctIndex ? '✓ Correct' : '✕ Incorrect'}
-                        </span>
-                      </div>
-                      <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-                        {currentQuestion.explanation}
-                      </p>
-                      <button
-                        onClick={handleNextQuestion}
-                        className="mt-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs px-5 py-2.5 rounded-md transition"
-                      >
-                        Next Question →
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* TAB 2: WEAK AREA DIAGNOSTICS */}
-              {activeTab === 'analytics' && (
-                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
-                      <span className="text-xs text-slate-400">Overall Accuracy</span>
-                      <div className="text-3xl font-extrabold text-blue-400 mt-1">{overallAccuracy}%</div>
-                    </div>
-                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
-                      <span className="text-xs text-slate-400">Units Attempted</span>
-                      <div className="text-3xl font-extrabold text-emerald-400 mt-1">
-                        {unitAnalytics.filter(u => u.total > 0).length} / 20
-                      </div>
-                    </div>
-                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
-                      <span className="text-xs text-slate-400">Flagged Weak Units</span>
-                      <div className="text-3xl font-extrabold text-rose-400 mt-1">
-                        {unitAnalytics.filter(u => u.isWeak).length}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Weakest Units List */}
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">
-                      Weakest Chapters Needing Review (&lt;70% Mastery)
-                    </h3>
-                    <div className="space-y-2">
-                      {unitAnalytics.filter(u => u.isWeak).length === 0 ? (
-                        <div className="p-4 bg-slate-900/50 rounded-lg text-xs text-slate-400 text-center">
-                          No weak units identified yet! Complete questions across all study units to generate detailed diagnostics.
-                        </div>
-                      ) : (
-                        unitAnalytics.filter(u => u.isWeak).map(unit => (
-                          <div key={unit.id} className="p-3 bg-rose-950/20 border border-rose-800/40 rounded-lg flex justify-between items-center text-xs">
-                            <div>
-                              <p className="font-semibold text-rose-200">{unit.title}</p>
-                              <p className="text-slate-400">{unit.correct} of {unit.total} correct</p>
-                            </div>
-                            <button
-                              onClick={() => {
-                                setSelectedUnitId(unit.id);
-                                setActiveTab("practice");
-                              }}
-                              className="bg-rose-800 hover:bg-rose-700 text-white px-3 py-1.5 rounded transition"
-                            >
-                              Drill SU {unit.id}
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  {/* All Chapters Breakdown */}
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">
-                      Complete 20-Unit Mastery Table
-                    </h3>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs text-slate-300">
-                        <thead className="bg-slate-900 text-slate-400 uppercase text-[10px]">
-                          <tr>
-                            <th className="p-2.5">Study Unit</th>
-                            <th className="p-2.5">Category</th>
-                            <th className="p-2.5 text-center">Attempts</th>
-                            <th className="p-2.5 text-center">Accuracy</th>
-                            <th className="p-2.5 text-right">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-700">
-                          {unitAnalytics.map(u => (
-                            <tr key={u.id} className="hover:bg-slate-700/30">
-                              <td className="p-2.5 font-medium text-white">{u.title}</td>
-                              <td className="p-2.5 text-slate-400">{u.category}</td>
-                              <td className="p-2.5 text-center">{u.total}</td>
-                              <td className="p-2.5 text-center">
-                                {u.percentage !== null ? `${u.percentage}%` : 'N/A'}
-                              </td>
-                              <td className="p-2.5 text-right">
-                                {u.percentage === null ? (
-                                  <span className="text-slate-500">Unstarted</span>
-                                ) : u.percentage >= 70 ? (
-                                  <span className="text-emerald-400 font-semibold">Proficient</span>
-                                ) : (
-                                  <span className="text-rose-400 font-semibold">Needs Review</span>
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 3: STUDY NOTES & CHEAT SHEET */}
-              {activeTab === 'notes' && (
-                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg space-y-4">
-                  <h2 className="text-lg font-bold text-white border-b border-slate-700 pb-2">
-                    {STUDY_UNITS.find(u => u.id === selectedUnitId)?.title} — Key Concepts
-                  </h2>
-
-                  {selectedUnitId === 1 && (
-                    <div className="space-y-4 text-xs md:text-sm text-slate-300 leading-relaxed">
-                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
-                        <strong className="text-blue-400 block mb-1">Small Business Gross Receipts Threshold:</strong>
-                        Average annual gross receipts of <strong>$31 million or less</strong> (3-year testing period) qualifies entities to use the cash method and exempts them from §263A UNICAP and inventory accrual requirements.
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
-                        <strong className="text-blue-400 block mb-1">Form 8832 vs Form 2553:</strong>
-                        Use <strong>Form 8832</strong> for default entity classification changes under Check-the-Box (e.g., LLC electing C Corp taxation). Use <strong>Form 2553</strong> for S Corp status.
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
-                        <strong className="text-blue-400 block mb-1">Qualified Tips & Overtime Deductions:</strong>
-                        Qualified tips up to $25,000 and qualified overtime up to $12,500 ($25,000 MFJ) can be deducted on Schedule 1-A (Form 1040), with phase-outs beginning at $150,000 MAGI ($300,000 MFJ).
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedUnitId !== 1 && (
-                    <div className="p-6 text-center text-slate-400 bg-slate-900/50 rounded-lg text-xs">
-                      Comprehensive key rules, thresholds, and form references for <strong>{STUDY_UNITS.find(u => u.id === selectedUnitId)?.title}</strong> are active. Switch to Practice Quiz mode to drill questions for this chapter!
-                    </div>
-                  )}
-                </div>
-              )}
-
-            </section>
-
-          </main>
-        </div>
-      );
+      } else if (type === 'drumroll') {
+        // Suspense Drumroll Tone
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(100, now);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      }
     }
 
-    // Render the React Component into the DOM
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<EAPart2StudyApp />);
+    /* ==========================================================================
+       3. APPLICATION LOGIC & RENDERING
+       ========================================================================== */
+    function switchMode(mode) {
+      currentMode = mode;
+      document.body.className = `theme-${mode}`;
+      currentIndex = 0;
+      renderCurrentView();
+    }
+
+    function filterTopic(domain) {
+      currentDomain = domain;
+      if (domain === "all") {
+        filteredQuestions = [...questionsDatabase];
+      } else {
+        filteredQuestions = questionsDatabase.filter(q => q.domain === domain);
+      }
+      currentIndex = 0;
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      const contentArea = document.getElementById("contentArea");
+      const domainTag = document.getElementById("domainTag");
+      const feedback = document.getElementById("feedback");
+      feedback.innerHTML = "";
+
+      if (filteredQuestions.length === 0) {
+        domainTag.innerText = "No Questions";
+        contentArea.innerHTML = "<p class='question-text'>No questions available for this topic filter.</p>";
+        return;
+      }
+
+      const q = filteredQuestions[currentIndex];
+      domainTag.innerText = q.domainName;
+
+      if (currentMode === "flashcards") {
+        isFlipped = false;
+        contentArea.innerHTML = `
+          <div class="flashcard-inner" onclick="flipCard()">
+            <p class="question-text" id="cardText">${q.question}</p>
+          </div>
+          <button class="action-btn" onclick="nextCard()">Next Card</button>
+        `;
+      } else {
+        // Quiz / Game Modes
+        contentArea.innerHTML = `
+          <p class="question-text">${q.question}</p>
+          <div class="options-grid">
+            ${q.options.map((opt, idx) => `
+              <button class="option-btn" onclick="handleAnswer(${idx})">${opt}</button>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function handleAnswer(selectedIndex) {
+      const q = filteredQuestions[currentIndex];
+      const feedback = document.getElementById("feedback");
+
+      playSound('drumroll');
+
+      setTimeout(() => {
+        if (selectedIndex === q.answer) {
+          playSound('correct');
+          feedback.style.color = "var(--accent-color)";
+          feedback.innerHTML = `✓ Correct! ${q.explanation}`;
+        } else {
+          playSound('wrong');
+          feedback.style.color = "#ef4444";
+          feedback.innerHTML = `✗ Incorrect. Try again!`;
+        }
+      }, 150);
+    }
+
+    function flipCard() {
+      const q = filteredQuestions[currentIndex];
+      const cardText = document.getElementById("cardText");
+      playSound('drumroll');
+      
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        cardText.innerHTML = `<strong style="color: var(--accent-color)">Answer:</strong><br>${q.options[q.answer]}<br><br><small>${q.explanation}</small>`;
+      } else {
+        cardText.innerText = q.question;
+      }
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % filteredQuestions.length;
+      renderCurrentView();
+    }
+
+    // Initialize App
+    renderCurrentView();
   </script>
 </body>
 </html>
