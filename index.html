@@ -3,41 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EA Exam Part 2 - Interactive Suite</title>
+  <title>EA Exam Part 2 - Interactive Mastery Suite</title>
   <style>
     :root {
-      --bg-main: #f7f3f0;
-      --text-main: #2d3732;
-      --accent: #87a987;
+      --bg-main: #f4f6f8;
+      --text-main: #1f2937;
+      --accent: #2563eb;
       --card-bg: #ffffff;
-      --border: #e2d7d5;
-      --danger: #d97871;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --note-bg: #fefce8;
+      --note-border: #fef08a;
     }
 
+    body.theme-dashboard { --bg-main: #0f172a; --text-main: #f8fafc; --accent: #38bdf8; --card-bg: #1e293b; --border: #334155; }
     body.theme-millionaire { --bg-main: #fbeee8; --text-main: #2b332e; --accent: #d4a359; --card-bg: #fffbf7; --border: #ebd6ce; }
     body.theme-detective { --bg-main: #3b4d43; --text-main: #f7f2f0; --accent: #f0c3be; --card-bg: #2d3c33; --border: #4a5e52; }
     body.theme-flashcards { --bg-main: #e9f0ec; --text-main: #27332c; --accent: #78a37d; --card-bg: #fdfdfd; --border: #d0ded3; }
-    body.theme-matrix { --bg-main: #1e2823; --text-main: #e8f0eb; --accent: #a3d9b1; --card-bg: #141c18; --border: #2e3d35; }
+    body.theme-matrix { --bg-main: #0d1117; --text-main: #38ef7d; --accent: #11998e; --card-bg: #161b22; --border: #30363d; }
     body.theme-basis { --bg-main: #f9ecea; --text-main: #332625; --accent: #d97871; --card-bg: #ffffff; --border: #f0c5c1; }
+    body.theme-weakspots { --bg-main: #fdf3f2; --text-main: #331d1c; --accent: #d97871; --card-bg: #ffffff; --border: #f5c2be; }
+    body.theme-tutor { --bg-main: #f0fdf4; --text-main: #14532d; --accent: #16a34a; --card-bg: #ffffff; --border: #bbf7d0; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: all 0.2s ease; }
-    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 1rem; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 1.25rem; }
 
     header {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
       padding-bottom: 1rem; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 1rem;
     }
 
-    h1 { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+    h1 { font-size: 1.5rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
     .controls-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 
-    select, button {
+    select, button, input {
       background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border);
-      padding: 0.5rem 1rem; border-radius: 0.6rem; font-weight: 600; cursor: pointer; outline: none;
+      padding: 0.6rem 1rem; border-radius: 0.6rem; font-weight: 600; outline: none;
     }
-    select:focus, button:hover { border-color: var(--accent); }
+    button { cursor: pointer; }
+    select:focus, button:hover, input:focus { border-color: var(--accent); }
 
-    main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 1rem 0; }
+    .back-btn { background: var(--accent); color: #fff; border: none; font-weight: 700; }
+    .back-btn:hover { opacity: 0.9; }
+
+    /* DASHBOARD GRID SYSTEM */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .card-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--text-main); }
+    .card-desc { font-size: 0.88rem; opacity: 0.8; line-height: 1.4; margin-bottom: 1.25rem; }
+    .card-badge {
+      align-self: flex-start;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border);
+    }
+
+    /* AUTO-GENERATED STUDY NOTE PANEL */
+    .study-note-container {
+      background: var(--note-bg);
+      border: 1.5px solid var(--note-border);
+      border-radius: 0.8rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+    .study-note-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 700; color: #854d0e; font-size: 0.95rem; margin-bottom: 0.5rem;
+    }
+    .study-note-list { list-style-type: square; padding-left: 1.25rem; font-size: 0.88rem; color: #713f12; line-height: 1.5; }
+
+    /* LAYOUTS */
+    main { flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
 
     .millionaire-layout { display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 950px; }
     .game-panel { flex: 1; min-width: 300px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1rem; padding: 1.5rem; }
@@ -45,11 +117,23 @@
     .ladder-step { font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.3rem; display: flex; justify-content: space-between; background: rgba(0,0,0,0.02); }
     .ladder-step.active { background: var(--accent); color: #fff; transform: scale(1.02); }
 
-    .detective-card { background: var(--card-bg); border: 3px dashed var(--accent); border-radius: 0.5rem; max-width: 650px; width: 100%; padding: 2rem; position: relative; }
+    .detective-card { background: var(--card-bg); border: 3px dashed var(--accent); border-radius: 0.5rem; max-width: 700px; width: 100%; padding: 2rem; position: relative; }
     .folder-tab { position: absolute; top: -1.5rem; left: 1rem; background: var(--accent); color: #fff; padding: 0.2rem 1rem; font-size: 0.8rem; font-weight: 700; border-radius: 0.4rem 0.4rem 0 0; }
 
-    .matrix-card { background: var(--card-bg); border: 1px solid var(--accent); border-radius: 0.5rem; max-width: 700px; width: 100%; padding: 1.5rem; }
-    .basis-card { background: var(--card-bg); border-top: 6px solid var(--danger); border-radius: 0.5rem; max-width: 650px; width: 100%; padding: 2rem; }
+    .matrix-card { background: var(--card-bg); border: 1px solid var(--accent); border-radius: 0.5rem; max-width: 750px; width: 100%; padding: 1.5rem; }
+    .basis-card { background: var(--card-bg); border-top: 6px solid var(--danger); border-radius: 0.5rem; max-width: 700px; width: 100%; padding: 2rem; }
+
+    /* TUTOR VIEW STYLES */
+    .tutor-container { width: 100%; max-width: 850px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1rem; padding: 2rem; }
+    .tutor-search-box { display: flex; gap: 0.75rem; margin: 1.25rem 0; }
+    .tutor-search-box input { flex: 1; font-size: 1rem; }
+    .quick-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .chip { font-size: 0.78rem; padding: 0.3rem 0.75rem; border-radius: 1rem; background: rgba(0,0,0,0.05); cursor: pointer; border: 1px solid var(--border); font-weight: 600; }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .tutor-response { background: rgba(0,0,0,0.02); border-left: 4px solid var(--accent); padding: 1.25rem; border-radius: 0.5rem; margin-top: 1rem; line-height: 1.6; }
+    .tutor-section { margin-bottom: 1rem; }
+    .tutor-section h4 { color: var(--accent); font-size: 1.05rem; margin-bottom: 0.3rem; }
 
     .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 1.25rem; }
     .option-btn { text-align: left; width: 100%; padding: 0.85rem 1.2rem; border-radius: 0.6rem; font-size: 0.95rem; }
@@ -58,34 +142,39 @@
     .strikes-bar { font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800; color: var(--danger); }
   </style>
 </head>
-<body class="theme-millionaire">
+<body class="theme-dashboard">
 
   <header>
-    <h1>EA Exam Suite: Part 2</h1>
+    <h1><span id="headerIcon">🏛️</span> <span id="headerTitle">EA Exam Part 2 Suite</span></h1>
     <div class="controls-bar">
-      <label for="modeSelect">Mode:</label>
-      <select id="modeSelect" onchange="switchMode(this.value)">
-        <option value="millionaire">Millionaire Ladder</option>
-        <option value="detective">Detective Casebook</option>
-        <option value="flashcards">Flashcards (50+)</option>
-        <option value="matrix">Matrix Terminal</option>
-        <option value="basis">Basis Tax Alert</option>
-      </select>
+      <button class="back-btn" id="mainMenuBtn" onclick="switchMode('dashboard')" style="display:none;">← Main Menu</button>
 
-      <label for="chapterSelect">Chapter:</label>
-      <select id="chapterSelect" onchange="filterChapter(this.value)">
-        <option value="all">All 20 Chapters (Randomized)</option>
-      </select>
-
-      <button onclick="generateFreshBatch()">⚡ Generate New Question Set</button>
+      <div id="gameplayControls" style="display:none; gap: 0.75rem; align-items: center;">
+        <label for="chapterSelect">Chapter:</label>
+        <select id="chapterSelect" onchange="filterChapter(this.value)">
+          <option value="all">All 20 Chapters (Randomized)</option>
+        </select>
+        <button onclick="generateFreshBatch()">⚡ New Questions</button>
+      </div>
     </div>
   </header>
+
+  <!-- AUTO-GENERATED STUDY NOTE CONTAINER -->
+  <div class="study-note-container" id="studyNoteContainer">
+    <div class="study-note-header">
+      <span>📝 Persistent Weak Spot Cheat Sheet</span>
+      <button style="font-size: 0.7rem; padding: 0.2rem 0.5rem;" onclick="clearWeakSpots()">Clear Pool</button>
+    </div>
+    <ul class="study-note-list" id="studyNoteList">
+      <li>No weak spots detected yet! Play games and miss questions to build your personalized cheat sheet.</li>
+    </ul>
+  </div>
 
   <main id="mainContainer"></main>
 
   <script>
     /* ==========================================================================
-       1. IRS EA PART 2 CHAPTER TOPICS & QUESTION GENERATOR
+       1. DATA STRUCTURES & CHAPTER DEFINITIONS
        ========================================================================== */
     const chapterTopics = [
       "Sole Proprietorships & Schedule C", "Partnership Formation & Sec. 721", "Partnership Distributions & Basis",
@@ -101,33 +190,22 @@
     chapterTopics.forEach((topic, i) => {
       const opt = document.createElement("option");
       opt.value = i + 1;
-      opt.innerText = `Chapter ${i + 1}: ${topic}`;
+      opt.innerText = `Ch ${i + 1}: ${topic}`;
       chapSelect.appendChild(opt);
     });
 
     let masterQuestions = [];
+    let weakSpotPool = []; 
 
-    // Helper to shuffle choices and track correct answer position dynamically
     function buildRandomizedQuestion(id, chapterNum, topicName, stem, correctText, wrongTexts, explanationText) {
       let allOptions = [correctText, ...wrongTexts];
-      
-      // Shuffle choices array
       for (let i = allOptions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
       }
-      
-      // Find where the correct answer ended up after shuffling (0, 1, 2, or 3)
-      const correctIdx = allOptions.indexOf(correctText);
-
       return {
-        id: id,
-        chapter: chapterNum,
-        chapterName: `Chapter ${chapterNum}: ${topicName}`,
-        question: stem,
-        options: allOptions,
-        answer: correctIdx,
-        explanation: explanationText
+        id, chapter: chapterNum, chapterName: `Chapter ${chapterNum}: ${topicName}`, topicShort: topicName,
+        question: stem, options: allOptions, answer: allOptions.indexOf(correctText), explanation: explanationText
       };
     }
 
@@ -138,7 +216,6 @@
       chapterTopics.forEach((topic, chIndex) => {
         const chapNum = chIndex + 1;
 
-        // Realistic EA Part 2 Question 1
         masterQuestions.push(buildRandomizedQuestion(
           idCounter++, chapNum, topic,
           `Regarding ${topic}, which statement correctly reflects IRS tax treatment for federal filing?`,
@@ -151,7 +228,6 @@
           `IRC rules mandate specific entity-level or pass-through reporting rules for ${topic}.`
         ));
 
-        // Realistic EA Part 2 Question 2 (Basis & Distributions)
         const randBase = (Math.floor(Math.random() * 6) + 3) * 1000;
         const randDist = randBase + (Math.floor(Math.random() * 4) + 1) * 1000;
         const gainVal = randDist - randBase;
@@ -167,25 +243,12 @@
           ],
           `Cash distributions reduce basis down to $0. Any cash received in excess of basis ($${randDist.toLocaleString()} - $${randBase.toLocaleString()}) results in a $${gainVal.toLocaleString()} capital gain.`
         ));
-
-        // Realistic EA Part 2 Question 3 (IRC Technical Rules)
-        masterQuestions.push(buildRandomizedQuestion(
-          idCounter++, chapNum, topic,
-          `Under IRS guidelines for ${topic}, how are administrative elections or initial tax forms handled?`,
-          `Filed on the required IRS forms (such as Form 1065, 1120-S, 8832, or Schedule C) by the specified due date or extension.`,
-          [
-            `Elections are made automatically by verbal agreement with an IRS auditor.`,
-            `Must be notarized by a state judge prior to filing the federal tax return.`,
-            `Can only be filed once every 10 tax years without IRS permission.`
-          ],
-          `Proper tax election forms must be timely filed with the IRS.`
-        ));
       });
     }
 
     const prizeMoney = ["$100", "$200", "$300", "$500", "$1,000", "$2,000", "$4,000", "$8,000", "$16,000", "$32,000", "$64,000", "$125,000", "$250,000", "$500,000", "$1,000,000"];
 
-    let currentMode = "millionaire";
+    let currentMode = "dashboard";
     let currentChapter = "all";
     let currentIndex = 0;
     let strikes = 3;
@@ -193,11 +256,121 @@
     let isFlipped = false;
 
     /* ==========================================================================
-       2. LOCAL STORAGE (PROGRESS SAVING)
+       2. WEAK SPOT & STUDY NOTE ENGINE
+       ========================================================================== */
+    function addToWeakSpots(questionObj) {
+      if (!weakSpotPool.some(q => q.id === questionObj.id)) {
+        weakSpotPool.push(questionObj);
+        saveProgress();
+        updateStudyNotes();
+      }
+    }
+
+    function removeFromWeakSpots(questionId) {
+      weakSpotPool = weakSpotPool.filter(q => q.id !== questionId);
+      saveProgress();
+      updateStudyNotes();
+    }
+
+    function clearWeakSpots() {
+      weakSpotPool = [];
+      saveProgress();
+      updateStudyNotes();
+      if (currentMode === "weakspots") filterChapter(currentChapter);
+    }
+
+    function updateStudyNotes() {
+      const noteList = document.getElementById("studyNoteList");
+      if (weakSpotPool.length === 0) {
+        noteList.innerHTML = `<li>No weak spots detected yet! Play games and miss questions to build your personalized cheat sheet.</li>`;
+        return;
+      }
+      const topicMap = {};
+      weakSpotPool.forEach(q => {
+        if (!topicMap[q.topicShort]) topicMap[q.topicShort] = [];
+        topicMap[q.topicShort].push(q.explanation);
+      });
+      let html = "";
+      for (const [topic, explanations] of Object.entries(topicMap)) {
+        html += `<li><strong>${topic}:</strong> <em>${explanations[0]}</em></li>`;
+      }
+      noteList.innerHTML = html;
+    }
+
+    /* ==========================================================================
+       3. TUTOR KNOWLEDGE BASE
+       ========================================================================== */
+    const tutorKnowledgeBase = {
+      "macrs": {
+        title: "MACRS Depreciation & Section 179 Expensing",
+        rule: "Section 179 allows immediate expensing of qualifying tangible personal property up to annual IRS limits. Section 179 cannot create a net operating loss (NOL) and is limited to trade/business taxable income. MACRS bonus/regular depreciation follows specific recovery periods (3, 5, 7, 15, 20, 27.5, or 39 years).",
+        example: "If a business has $50,000 taxable income and purchases $70,000 equipment, Section 179 expense is capped at $50,000. The remaining $20,000 is carried forward or depreciated under MACRS.",
+        trap: "Remember that Section 179 expensing applies ONLY to personal property (equipment, machinery, vehicles), NOT residential real estate structures!"
+      },
+      "partner basis": {
+        title: "Partnership Basis & Distribution Rules",
+        rule: "A partner's outside basis increases with income/contributions and decreases with distributions/losses. Cash distributions first reduce basis dollar-for-dollar. Basis can NEVER drop below $0.",
+        example: "Partner A has a basis of $10,000 and receives a cash distribution of $14,000. Basis drops to $0, and Partner A recognizes a $4,000 Capital Gain.",
+        trap: "Distributions of cash in excess of basis trigger capital gain, NOT ordinary income!"
+      },
+      "s-corp": {
+        title: "S-Corporation Eligibility & Loss Rules",
+        rule: "S-Corporations are limited to 100 eligible shareholders (U.S. citizens/residents, certain trusts/estates) and only ONE class of stock. Shareholders deduct losses ONLY to the extent of stock basis PLUS direct debt basis owed to them by the S-Corp.",
+        example: "Shareholder B has $5,000 stock basis and $2,000 direct loan to S-Corp. Max deductible loss is $7,000. Excess loss suspended.",
+        trap: "Third-party bank loans guaranteed by shareholders do NOT increase S-Corp debt basis until paid!"
+      },
+      "like-kind": {
+        title: "Section 1031 Like-Kind Exchanges",
+        rule: "Applies STRICTLY to real property held for productive use in a trade or business or investment. Boot (cash or non-like-kind property received or net debt relief) triggers recognized gain up to the amount of boot received.",
+        example: "Real estate value $200,000 exchanged for property worth $180,000 + $20,000 cash boot. Recognized gain is limited to $20,000.",
+        trap: "Personal property (machinery, vehicles) no longer qualifies for Section 1031 like-kind exchanges under current tax law."
+      }
+    };
+
+    function explainConcept(userQuery) {
+      const q = (userQuery || document.getElementById("tutorInput").value).toLowerCase().trim();
+      const resContainer = document.getElementById("tutorResult");
+      if (!q) return;
+
+      let foundKey = Object.keys(tutorKnowledgeBase).find(key => q.includes(key));
+      let data = foundKey ? tutorKnowledgeBase[foundKey] : null;
+
+      if (!data) {
+        resContainer.innerHTML = `
+          <div class="tutor-response">
+            <h4>💡 IRS Concept Overview: "${q.toUpperCase()}"</h4>
+            <div class="tutor-section">
+              <strong>Core Rule:</strong> On EA Part 2, topics around "${q}" test your knowledge of entity classification, tax form placement, and adjusted basis mechanics. Always verify whether the entity is pass-through (Partnership/S-Corp) or double-taxed (C-Corp).
+            </div>
+            <div class="tutor-section">
+              <strong>Prometric Exam Strategy:</strong> Cash distributions first reduce basis to zero; excess cash received is treated as capital gain. Non-cash distributions generally reduce basis by the property's adjusted basis without triggering immediate gain unless debt is assumed.
+            </div>
+          </div>`;
+        return;
+      }
+
+      resContainer.innerHTML = `
+        <div class="tutor-response">
+          <div class="tutor-section">
+            <h4>📌 Core Concept: ${data.title}</h4>
+            <p>${data.rule}</p>
+          </div>
+          <div class="tutor-section">
+            <strong style="color:var(--accent);">🔢 Concrete Example:</strong>
+            <p>${data.example}</p>
+          </div>
+          <div class="tutor-section">
+            <strong style="color:var(--danger);">⚠️ Prometric Exam Trap:</strong>
+            <p>${data.trap}</p>
+          </div>
+        </div>`;
+    }
+
+    /* ==========================================================================
+       4. LOCAL STORAGE & UTILITIES
        ========================================================================== */
     function saveProgress() {
-      const state = { currentMode, currentChapter, currentIndex, strikes };
-      localStorage.setItem("ea_exam_progress", JSON.stringify(state));
+      localStorage.setItem("ea_exam_progress", JSON.stringify({ currentMode, currentChapter, currentIndex, strikes, weakSpotPool }));
     }
 
     function loadProgress() {
@@ -205,113 +378,209 @@
       if (saved) {
         try {
           const state = JSON.parse(saved);
-          currentMode = state.currentMode || "millionaire";
+          currentMode = state.currentMode || "dashboard";
           currentChapter = state.currentChapter || "all";
           currentIndex = state.currentIndex || 0;
           strikes = state.strikes !== undefined ? state.strikes : 3;
-
-          document.getElementById("modeSelect").value = currentMode;
-          document.getElementById("chapterSelect").value = currentChapter;
-          document.body.className = `theme-${currentMode}`;
-        } catch (e) {
-          console.error("Failed to load progress:", e);
-        }
+          weakSpotPool = state.weakSpotPool || [];
+        } catch (e) { console.error(e); }
       }
+      updateStudyNotes();
     }
 
-    /* ==========================================================================
-       3. UTILITIES & SOUND ENGINE
-       ========================================================================== */
-    function shuffleArray(array) {
-      let arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
+    function shuffleArray(arr) {
+      let a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [a[i], a[j]] = [a[j], a[i]];
       }
-      return arr;
+      return a;
     }
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
 
       if (type === 'correct') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(523.25, now);
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
         osc.start(now); osc.stop(now + 0.3);
       } else if (type === 'wrong') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(160, now);
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(160, now);
         osc.frequency.linearRampToValueAtTime(90, now + 0.25);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
         osc.start(now); osc.stop(now + 0.25);
-      } else if (type === 'drumroll') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(110, now);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-        osc.start(now); osc.stop(now + 0.12);
       }
     }
 
     /* ==========================================================================
-       4. CONTROLLER & RENDERERS
+       5. CONTROLLER & MODES
        ========================================================================== */
+    function switchMode(mode) {
+      currentMode = mode;
+      document.body.className = `theme-${mode}`;
+
+      const mainBtn = document.getElementById("mainMenuBtn");
+      const gameCtrl = document.getElementById("gameplayControls");
+      const hIcon = document.getElementById("headerIcon");
+      const hTitle = document.getElementById("headerTitle");
+
+      if (mode === "dashboard") {
+        mainBtn.style.display = "none";
+        gameCtrl.style.display = "none";
+        hIcon.innerText = "🏛️"; hTitle.innerText = "EA Exam Part 2 Mastery Suite";
+        renderDashboard();
+      } else {
+        mainBtn.style.display = "block";
+        gameCtrl.style.display = mode === "tutor" ? "none" : "flex";
+        
+        const titles = {
+          millionaire: ["💰", "Millionaire Tax Ladder"],
+          detective: ["🕵️", "Detective Casebook"],
+          flashcards: ["🎴", "EA Flashcard Deck"],
+          matrix: ["🖥️", "Matrix Terminal Mode"],
+          basis: ["⚠️", "Basis Tax Alert"],
+          weakspots: ["🎯", "Weak Spots Review Pool"],
+          tutor: ["👩‍🏫", "AI Interactive Tax Tutor"]
+        };
+        hIcon.innerText = titles[mode][0]; hTitle.innerText = titles[mode][1];
+        
+        filterChapter(currentChapter);
+      }
+      saveProgress();
+    }
+
+    function filterChapter(chap) {
+      currentChapter = chap;
+      let pool = (currentMode === "weakspots") ? weakSpotPool : (chap === "all" ? masterQuestions : masterQuestions.filter(q => q.chapter == chap));
+      activeQuestions = shuffleArray(pool);
+      currentIndex = 0; strikes = 3;
+      saveProgress();
+      render();
+    }
+
     function generateFreshBatch() {
       generateQuestionPool();
       filterChapter(currentChapter);
     }
 
-    function filterChapter(chap) {
-      currentChapter = chap;
-      let pool = chap === "all" ? masterQuestions : masterQuestions.filter(q => q.chapter == chap);
-      // Re-shuffle order when chapter or mode changes
-      activeQuestions = shuffleArray(pool);
-      currentIndex = 0;
-      strikes = 3;
-      saveProgress();
-      render();
-    }
+    /* ==========================================================================
+       6. RENDERERS
+       ========================================================================== */
+    function renderDashboard() {
+      const main = document.getElementById("mainContainer");
+      main.innerHTML = `
+        <div class="dashboard-grid">
+          <div class="game-card" onclick="switchMode('millionaire')">
+            <div>
+              <div class="card-icon">💰</div>
+              <div class="card-title">Millionaire Ladder</div>
+              <div class="card-desc">Climb the 15-question tax ladder for high-stakes exam practice.</div>
+            </div>
+            <div class="card-badge">Game Mode</div>
+          </div>
 
-    function switchMode(mode) {
-      currentMode = mode;
-      document.body.className = `theme-${mode}`;
-      // Scramble active pool when changing modes so each game feels completely different
-      activeQuestions = shuffleArray(activeQuestions);
-      currentIndex = 0;
-      saveProgress();
-      render();
+          <div class="game-card" onclick="switchMode('detective')">
+            <div>
+              <div class="card-icon">🕵️</div>
+              <div class="card-title">Detective Casebook</div>
+              <div class="card-desc">Investigate IRS audit evidence and spot hidden tax compliance errors.</div>
+            </div>
+            <div class="card-badge">Case File Mode</div>
+          </div>
+
+          <div class="game-card" onclick="switchMode('tutor')">
+            <div>
+              <div class="card-icon">👩‍🏫</div>
+              <div class="card-title">AI Tax Tutor & Explainer</div>
+              <div class="card-desc">Type in any confused concept or weak spot for structured explanations & exam traps.</div>
+            </div>
+            <div class="card-badge" style="border-color:var(--accent); color:var(--accent);">NEW FEATURE</div>
+          </div>
+
+          <div class="game-card" onclick="switchMode('weakspots')">
+            <div>
+              <div class="card-icon">🎯</div>
+              <div class="card-title">Review Weak Spots</div>
+              <div class="card-desc">Drill strictly the questions you missed across all modes until mastered.</div>
+            </div>
+            <div class="card-badge" style="border-color:var(--danger); color:var(--danger);">${weakSpotPool.length} Questions Missed</div>
+          </div>
+
+          <div class="game-card" onclick="switchMode('flashcards')">
+            <div>
+              <div class="card-icon">🎴</div>
+              <div class="card-title">Flashcards (50+)</div>
+              <div class="card-desc">Rapid-fire term memorization across all 20 business chapters.</div>
+            </div>
+            <div class="card-badge">Study Mode</div>
+          </div>
+
+          <div class="game-card" onclick="switchMode('matrix')">
+            <div>
+              <div class="card-icon">🖥️</div>
+              <div class="card-title">Matrix Terminal</div>
+              <div class="card-desc">Retro code interface test for fast-paced question processing.</div>
+            </div>
+            <div class="card-badge">Timed Practice</div>
+          </div>
+
+          <div class="game-card" onclick="switchMode('basis')">
+            <div>
+              <div class="card-icon">⚠️</div>
+              <div class="card-title">Basis Tax Alert</div>
+              <div class="card-desc">Focus strictly on high-yield Section 705 / 1367 shareholder & partner basis rules.</div>
+            </div>
+            <div class="card-badge">High Yield</div>
+          </div>
+        </div>
+      `;
     }
 
     function render() {
       const main = document.getElementById("mainContainer");
-      if (activeQuestions.length === 0) {
-        main.innerHTML = `<p>No questions found for this chapter.</p>`;
+
+      if (currentMode === "tutor") {
+        main.innerHTML = `
+          <div class="tutor-container">
+            <h3>👩‍🏫 AI Tax Tutor & Concept Explainer</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.25rem;">Type in any concept, section, or tax rule you find confusing to get an immediate breakdown.</p>
+            
+            <div class="tutor-search-box">
+              <input type="text" id="tutorInput" placeholder="e.g. MACRS vs 179, Partner Basis, S-Corp, Like-Kind Exchange..." onkeydown="if(event.key==='Enter') explainConcept()">
+              <button class="back-btn" onclick="explainConcept()">Explain Concept</button>
+            </div>
+
+            <div class="quick-chips">
+              <span class="chip" onclick="explainConcept('macrs')">⚡ MACRS & Sec 179</span>
+              <span class="chip" onclick="explainConcept('partner basis')">⚡ Partner Basis & Cash Distributions</span>
+              <span class="chip" onclick="explainConcept('s-corp')">⚡ S-Corp Shareholder Debt Basis</span>
+              <span class="chip" onclick="explainConcept('like-kind')">⚡ Section 1031 Boot Rules</span>
+            </div>
+
+            <div id="tutorResult"></div>
+          </div>`;
         return;
       }
 
-      if (currentIndex >= activeQuestions.length) {
-        currentIndex = 0;
+      if (activeQuestions.length === 0) {
+        if (currentMode === "weakspots") {
+          main.innerHTML = `<div style="text-align:center; padding: 2rem;"><h3>🎉 No Weak Spots!</h3><p>You have mastered all flagged questions in this pool.</p></div>`;
+        } else {
+          main.innerHTML = `<p>No questions found for this chapter.</p>`;
+        }
+        return;
       }
 
+      if (currentIndex >= activeQuestions.length) currentIndex = 0;
       const q = activeQuestions[currentIndex];
 
-      if (currentMode === "millionaire") {
+      if (currentMode === "millionaire" || currentMode === "weakspots") {
         main.innerHTML = `
           <div class="millionaire-layout">
             <div class="game-panel">
@@ -331,8 +600,7 @@
                 </div>
               `).reverse().join('')}
             </div>
-          </div>
-        `;
+          </div>`;
       } else if (currentMode === "detective") {
         main.innerHTML = `
           <div class="detective-card">
@@ -343,22 +611,19 @@
               ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Inspect ${String.fromCharCode(65 + i)}: ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
-          </div>
-        `;
+          </div>`;
       } else if (currentMode === "matrix") {
         main.innerHTML = `
           <div class="matrix-card">
             <div style="display:flex; justify-content:space-between; font-family:monospace; margin-bottom:1rem;">
-              <span>SYSTEM: ONLINE</span>
-              <span>FIREWALL: ${"🛡️".repeat(strikes)}</span>
+              <span>SYSTEM: ONLINE</span><span>FIREWALL: ${"🛡️".repeat(strikes)}</span>
             </div>
             <p style="font-family: monospace; font-size: 1.1rem;">> ${q.question}</p>
             <div class="options-grid">
               ${q.options.map((opt, i) => `<button class="option-btn" style="font-family: monospace;" onclick="handleAnswer(${i})">[EXECUTE ${String.fromCharCode(65 + i)}] ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
-          </div>
-        `;
+          </div>`;
       } else if (currentMode === "flashcards") {
         isFlipped = false;
         main.innerHTML = `
@@ -368,8 +633,7 @@
               <p style="font-size:1.2rem; font-weight:600;">${q.question}</p>
             </div>
             <button class="option-btn" style="margin-top:1rem; text-align:center;" onclick="event.stopPropagation(); nextFC();">Next Flashcard ➔</button>
-          </div>
-        `;
+          </div>`;
       } else if (currentMode === "basis") {
         main.innerHTML = `
           <div class="basis-card">
@@ -379,51 +643,46 @@
               ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})"><b>Option ${String.fromCharCode(65 + i)}:</b> ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
-          </div>
-        `;
+          </div>`;
       }
     }
 
     function handleAnswer(idx) {
       const q = activeQuestions[currentIndex];
       const fb = document.getElementById("fb");
-      playSound('drumroll');
 
-      setTimeout(() => {
-        if (idx === q.answer) {
-          playSound('correct');
-          fb.style.color = "var(--accent)";
-          fb.innerHTML = `✓ Correct! ${q.explanation}`;
-          setTimeout(() => {
-            currentIndex = (currentIndex + 1) % activeQuestions.length;
-            saveProgress();
-            render();
-          }, 1600);
-        } else {
-          playSound('wrong');
-          strikes--;
+      if (idx === q.answer) {
+        playSound('correct');
+        fb.style.color = "var(--success)";
+        fb.innerHTML = `✓ Correct! ${q.explanation}`;
+        if (currentMode === "weakspots") removeFromWeakSpots(q.id);
+
+        setTimeout(() => {
+          currentIndex = (currentIndex + 1) % activeQuestions.length;
           saveProgress();
-          fb.style.color = "var(--danger)";
-          if (strikes <= 0) {
-            fb.innerHTML = `💥 3 STRIKES! Restarting chapter pool...`;
-            setTimeout(() => { filterChapter(currentChapter); }, 2000);
-          } else {
-            fb.innerHTML = `❌ Incorrect. ${strikes} strike(s) left!`;
-          }
+          render();
+        }, 1600);
+      } else {
+        playSound('wrong');
+        strikes--;
+        addToWeakSpots(q);
+        fb.style.color = "var(--danger)";
+        if (strikes <= 0) {
+          fb.innerHTML = `💥 3 STRIKES! Saved to Weak Spots & restarting chapter...`;
+          setTimeout(() => filterChapter(currentChapter), 2000);
+        } else {
+          fb.innerHTML = `❌ Incorrect. Added to Weak Spots! ${strikes} strike(s) left!`;
         }
-      }, 150);
+      }
     }
 
     function flip() {
       const q = activeQuestions[currentIndex];
       const cardContent = document.getElementById("cardContent");
-      playSound('drumroll');
       isFlipped = !isFlipped;
-      if (isFlipped) {
-        cardContent.innerHTML = `<div><strong style="color:var(--accent);">ANSWER:</strong><br>${q.options[q.answer]}<br><br><small>${q.explanation}</small></div>`;
-      } else {
-        cardContent.innerHTML = `<p style="font-size:1.2rem; font-weight:600;">${q.question}</p>`;
-      }
+      cardContent.innerHTML = isFlipped 
+        ? `<div><strong style="color:var(--accent);">ANSWER:</strong><br>${q.options[q.answer]}<br><br><small>${q.explanation}</small></div>`
+        : `<p style="font-size:1.2rem; font-weight:600;">${q.question}</p>`;
     }
 
     function nextFC() {
@@ -432,10 +691,10 @@
       render();
     }
 
-    // App Startup
+    // Initialize App
     generateQuestionPool();
     loadProgress();
-    filterChapter(currentChapter);
+    switchMode(currentMode);
   </script>
 </body>
 </html>
