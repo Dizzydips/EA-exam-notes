@@ -4,50 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EA Exam Part 2 - Interactive Mastery Suite Pro</title>
+  <!-- Import Google Fonts: Caveat for cursive handwriting look -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-main: #0f172a;
-      --text-main: #f8fafc;
-      --accent: #38bdf8;
-      --accent-hover: #0284c7;
-      --card-bg: #1e293b;
-      --border: #334155;
+      --bg-main: #fdfbf7;
+      --text-main: #2c2c2c;
+      --accent: #8b5cf6;
+      --accent-hover: #7c3aed;
+      --card-bg: #fffdf9;
+      --border: #b5a48b;
       --danger: #ef4444;
       --warning: #f59e0b;
       --success: #10b981;
-      --note-bg: #1e293b;
+      --note-bg: #fffbf0;
       --note-border: #f59e0b;
-      --glass: rgba(30, 41, 59, 0.7);
     }
 
-    body.theme-dashboard { --bg-main: #0b1120; --card-bg: #1e293b; --accent: #38bdf8; }
-    body.theme-millionaire { --bg-main: #1a0f2e; --text-main: #f3e8ff; --accent: #c084fc; --card-bg: #2e1065; --border: #581c87; }
-    body.theme-detective { --bg-main: #141c18; --text-main: #f0fdf4; --accent: #4ade80; --card-bg: #162e21; --border: #22543d; }
-    body.theme-flashcards { --bg-main: #0f172a; --text-main: #f8fafc; --accent: #a855f7; --card-bg: #1e293b; --border: #334155; }
-    body.theme-matrix { --bg-main: #050505; --text-main: #22c55e; --accent: #15803d; --card-bg: #0a0a0a; --border: #166534; }
-    body.theme-basis { --bg-main: #1c0a0a; --text-main: #fef2f2; --accent: #f87171; --card-bg: #450a0a; --border: #7f1d1d; }
-    body.theme-weakspots { --bg-main: #1c1917; --text-main: #fafaf9; --accent: #fb923c; --card-bg: #292524; --border: #44403c; }
-    body.theme-tutor { --bg-main: #062016; --text-main: #ecfdf5; --accent: #34d399; --card-bg: #064e3b; --border: #047857; }
+    body.theme-dashboard { --bg-main: #fdfbf7; --card-bg: #fffdf9; --accent: #8b5cf6; }
+    body.theme-millionaire { --bg-main: #fcf5ff; --text-main: #2e1065; --accent: #9333ea; --card-bg: #ffffff; --border: #d8b4fe; }
+    body.theme-detective { --bg-main: #f0fdf4; --text-main: #14532d; --accent: #16a34a; --card-bg: #ffffff; --border: #86efac; }
+    body.theme-flashcards { --bg-main: #faf5ff; --text-main: #3b0764; --accent: #a855f7; --card-bg: #ffffff; --border: #e9d5ff; }
+    body.theme-matrix { --bg-main: #f4fbf7; --text-main: #065f46; --accent: #059669; --card-bg: #ffffff; --border: #a7f3d0; }
+    body.theme-basis { --bg-main: #fff1f2; --text-main: #7f1d1d; --accent: #dc2626; --card-bg: #ffffff; --border: #fca5a5; }
+    body.theme-weakspots { --bg-main: #fff7ed; --text-main: #7c2d12; --accent: #ea580c; --card-bg: #ffffff; --border: #fdba74; }
+    body.theme-tutor { --bg-main: #f0fdf4; --text-main: #064e3b; --accent: #0d9488; --card-bg: #ffffff; --border: #99f6e4; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; transition: background-color 0.25s, border-color 0.25s, transform 0.2s; }
-    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 1.25rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Caveat', cursive, sans-serif; transition: background-color 0.25s, border-color 0.25s, transform 0.2s; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 1.25rem; font-size: 24px; }
 
     header {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      padding-bottom: 1rem; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; gap: 1rem;
+      padding-bottom: 1rem; border-bottom: 2px dashed var(--border); margin-bottom: 1.5rem; gap: 1rem;
     }
 
-    h1 { font-size: 1.6rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 0.6rem; letter-spacing: -0.02em; }
+    h1 { font-size: 2.2rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 0.6rem; }
     .controls-bar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
 
     select, button, input, textarea {
-      background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border);
-      padding: 0.65rem 1.1rem; border-radius: 0.75rem; font-weight: 600; outline: none; font-size: 0.9rem;
+      background: var(--card-bg); color: var(--text-main); border: 2px solid var(--border);
+      padding: 0.5rem 1rem; border-radius: 1rem; font-weight: 600; outline: none; font-size: 22px; font-family: 'Caveat', cursive;
     }
-    button { cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; }
-    button:hover { border-color: var(--accent); background: var(--border); }
+    button { cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+    button:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-    .back-btn { background: var(--accent); color: #0f172a; border: none; font-weight: 700; }
+    .back-btn { background: var(--accent); color: #fff; border: none; font-weight: 700; }
     .back-btn:hover { background: var(--accent-hover); color: #fff; }
 
     /* UPLOAD GATEWAY CONTAINER */
@@ -56,21 +57,21 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; padding: 2rem;
     }
     .gateway-card {
-      background: var(--card-bg); border: 2px solid var(--accent); border-radius: 1.5rem;
-      max-width: 650px; width: 100%; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      background: var(--card-bg); border: 3px dashed var(--accent); border-radius: 1.5rem;
+      max-width: 650px; width: 100%; padding: 2.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.1);
       text-align: center; display: flex; flex-direction: column; gap: 1.25rem;
     }
 
     /* TOP PROGRESS BAR */
     .progress-bar-container {
-      width: 100%; height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; overflow: hidden; display: none;
+      width: 100%; height: 10px; background: var(--border); border-radius: 5px; margin-bottom: 1.5rem; overflow: hidden; display: none;
     }
     .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
 
     /* DASHBOARD GRID SYSTEM */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       max-width: 1100px;
       margin: 0 auto;
@@ -79,7 +80,7 @@
 
     .game-card {
       background: var(--card-bg);
-      border: 1.5px solid var(--border);
+      border: 2px dashed var(--border);
       border-radius: 1.25rem;
       padding: 1.75rem;
       display: flex;
@@ -87,33 +88,30 @@
       justify-content: space-between;
       cursor: pointer;
       position: relative;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
     }
     .game-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       border-color: var(--accent);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
     }
 
-    .card-icon { font-size: 2.75rem; margin-bottom: 1rem; }
-    .card-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-main); letter-spacing: -0.01em; }
-    .card-desc { font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin-bottom: 1.5rem; }
+    .card-icon { font-size: 2.75rem; margin-bottom: 0.5rem; }
+    .card-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--accent); }
+    .card-desc { font-size: 1.2rem; opacity: 0.85; line-height: 1.3; margin-bottom: 1.5rem; }
     .card-badge {
       align-self: flex-start;
-      padding: 0.3rem 0.8rem;
-      border-radius: 2rem;
-      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 1rem;
       font-weight: 700;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.03);
       border: 1px solid var(--border);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     /* STUDY NOTE PANEL */
     .study-note-container {
       background: var(--note-bg);
-      border: 1.5px solid var(--note-border);
+      border: 2px dashed var(--note-border);
       border-radius: 1rem;
       padding: 1.25rem 1.5rem;
       margin-bottom: 1.5rem;
@@ -125,84 +123,95 @@
     }
     .study-note-header {
       display: flex; justify-content: space-between; align-items: center;
-      font-weight: 700; color: #f59e0b; font-size: 1rem; margin-bottom: 0.75rem;
+      font-weight: 700; color: #d97706; font-size: 1.3rem; margin-bottom: 0.75rem;
     }
-    .study-note-list { list-style-type: none; font-size: 0.9rem; opacity: 0.9; line-height: 1.6; display: flex; flex-direction: column; gap: 0.5rem; }
-    .study-note-list li { background: rgba(0,0,0,0.2); padding: 0.6rem 1rem; border-radius: 0.5rem; border-left: 3px solid var(--warning); }
+    .study-note-list { list-style-type: none; font-size: 1.2rem; line-height: 1.4; display: flex; flex-direction: column; gap: 0.5rem; }
+    .study-note-list li { background: rgba(0,0,0,0.02); padding: 0.5rem 0.8rem; border-radius: 0.5rem; border-left: 4px solid var(--warning); }
 
     /* LAYOUTS */
     main { flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
 
     .millionaire-layout { display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 950px; }
-    .game-panel { flex: 1; min-width: 320px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1.25rem; padding: 2rem; }
-    .ladder-panel { width: 260px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1.25rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem; }
-    .ladder-step { font-size: 0.8rem; font-weight: 700; padding: 0.35rem 0.6rem; border-radius: 0.4rem; display: flex; justify-content: space-between; opacity: 0.6; }
-    .ladder-step.active { background: var(--accent); color: #0f172a; opacity: 1; font-weight: 800; transform: scale(1.03); }
+    .game-panel { flex: 1; min-width: 320px; background: var(--card-bg); border: 2px dashed var(--border); border-radius: 1.25rem; padding: 2rem; }
+    .ladder-panel { width: 260px; background: var(--card-bg); border: 2px dashed var(--border); border-radius: 1.25rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .ladder-step { font-size: 1.1rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 0.4rem; display: flex; justify-content: space-between; opacity: 0.6; }
+    .ladder-step.active { background: var(--accent); color: #fff; opacity: 1; transform: scale(1.02); }
 
     .detective-card { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 1rem; max-width: 750px; width: 100%; padding: 2.25rem; position: relative; }
-    .folder-tab { position: absolute; top: -1.2rem; left: 1.5rem; background: var(--accent); color: #0f172a; padding: 0.25rem 1.1rem; font-size: 0.8rem; font-weight: 800; border-radius: 0.4rem; }
+    .folder-tab { position: absolute; top: -1.2rem; left: 1.5rem; background: var(--accent); color: #fff; padding: 0.1rem 1rem; font-size: 1rem; font-weight: 700; border-radius: 0.4rem; }
 
-    .matrix-card { background: var(--card-bg); border: 1.5px solid var(--accent); border-radius: 1rem; max-width: 750px; width: 100%; padding: 2rem; box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); }
-    .basis-card { background: var(--card-bg); border-top: 6px solid var(--danger); border-radius: 1rem; max-width: 750px; width: 100%; padding: 2.25rem; }
+    .matrix-card { background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 1rem; max-width: 750px; width: 100%; padding: 2rem; }
+    .basis-card { background: var(--card-bg); border-top: 6px solid var(--danger); border-radius: 1rem; max-width: 750px; width: 100%; padding: 2.25rem; border-left: 2px dashed var(--border); border-right: 2px dashed var(--border); border-bottom: 2px dashed var(--border); }
 
     /* TUTOR VIEW STYLES */
-    .tutor-container { width: 100%; max-width: 850px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1.25rem; padding: 2.25rem; }
+    .tutor-container { width: 100%; max-width: 850px; background: var(--card-bg); border: 2px dashed var(--border); border-radius: 1.25rem; padding: 2.25rem; }
     .tutor-search-box { display: flex; gap: 0.75rem; margin: 1.5rem 0; }
-    .tutor-search-box input { flex: 1; font-size: 1rem; }
+    .tutor-search-box input { flex: 1; font-size: 1.3rem; }
     .quick-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.75rem; }
-    .chip { font-size: 0.82rem; padding: 0.4rem 0.85rem; border-radius: 2rem; background: rgba(255,255,255,0.05); cursor: pointer; border: 1px solid var(--border); font-weight: 600; }
-    .chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(255,255,255,0.1); }
+    .chip { font-size: 1.1rem; padding: 0.2rem 0.8rem; border-radius: 2rem; background: rgba(0,0,0,0.03); cursor: pointer; border: 1px dashed var(--border); font-weight: 600; }
+    .chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,0,0,0.06); }
     
-    .tutor-response { background: rgba(0,0,0,0.25); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0.75rem; margin-top: 1.25rem; line-height: 1.6; }
+    .tutor-response { background: rgba(0,0,0,0.02); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0.75rem; margin-top: 1.25rem; line-height: 1.4; }
     .tutor-section { margin-bottom: 1.25rem; }
-    .tutor-section h4 { color: var(--accent); font-size: 1.1rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+    .tutor-section h4 { color: var(--accent); font-size: 1.4rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
 
     .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.85rem; margin-top: 1.5rem; }
-    .option-btn { text-align: left; width: 100%; padding: 1rem 1.25rem; border-radius: 0.75rem; font-size: 0.95rem; line-height: 1.4; }
-    .option-btn:hover { border-color: var(--accent); background: rgba(255,255,255,0.05); }
-    .feedback { margin-top: 1.5rem; font-weight: 700; min-height: 1.5rem; padding: 0.75rem 1rem; border-radius: 0.5rem; }
-    .strikes-bar { font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800; color: var(--danger); display: flex; justify-content: space-between; align-items: center; }
+    .option-btn { text-align: left; width: 100%; padding: 0.8rem 1.25rem; border-radius: 0.75rem; font-size: 1.3rem; line-height: 1.2; }
+    .option-btn:hover { border-color: var(--accent); background: rgba(0,0,0,0.02); }
+    .feedback { margin-top: 1.5rem; font-weight: 700; min-height: 1.5rem; padding: 0.75rem 1rem; border-radius: 0.5rem; font-size: 1.3rem; }
+    .strikes-bar { font-size: 1.4rem; margin-bottom: 1rem; font-weight: 700; color: var(--danger); display: flex; justify-content: space-between; align-items: center; }
 
-    /* MODALS (CALCULATOR & WEB FEED IMPORTER) */
-    .calc-modal, .feed-modal { display: none; position: fixed; bottom: 2rem; background: var(--card-bg); border: 2px solid var(--accent); border-radius: 1rem; padding: 1.25rem; width: 320px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); z-index: 100; }
+    /* MODALS */
+    .calc-modal, .feed-modal { display: none; position: fixed; bottom: 2rem; background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 1rem; padding: 1.25rem; width: 320px; box-shadow: 0 15px 25px rgba(0,0,0,0.15); z-index: 100; }
     .calc-modal { right: 2rem; width: 280px; }
     .feed-modal { right: 22rem; width: 340px; }
     .calc-modal header, .feed-modal header { display: flex; justify-content: space-between; border: none; margin: 0; padding: 0 0 0.5rem 0; }
-    .calc-display { width: 100%; text-align: right; font-size: 1.25rem; font-family: monospace; padding: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 0.5rem; margin-bottom: 0.75rem; color: var(--accent); }
+    .calc-display { width: 100%; text-align: right; font-size: 1.5rem; padding: 0.5rem; background: rgba(0,0,0,0.02); border: 1px dashed var(--border); border-radius: 0.5rem; margin-bottom: 0.75rem; color: var(--accent); }
     .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
-    .calc-grid button { padding: 0.6rem; justify-content: center; font-size: 0.9rem; }
+    .calc-grid button { padding: 0.4rem; justify-content: center; font-size: 1.2rem; }
   </style>
+
+  <!-- PDF.js library for direct browser PDF parsing -->
+  <script type="module">
+    import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.mjs';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.mjs';
+    window.pdfjsLib = pdfjsLib;
+  </script>
 </head>
 <body class="theme-dashboard">
 
-  <!-- UPFRONT UPLOAD GATEWAY (LOCKS DASHBOARD UNTIL LOADED) -->
+  <!-- UPFRONT UPLOAD GATEWAY (PDF OR TEXT) -->
   <div class="gateway-overlay" id="uploadGateway">
     <div class="gateway-card">
-      <h2 style="color:var(--accent);">📥 Load 20 Chapters Content</h2>
-      <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5;">Paste your complete web questions payload, JSON structures, or bulk chapter notes below. Alternatively, load the default comprehensive 20-chapter EA Part 2 question bank instantly.</p>
+      <h2 style="color:var(--accent); font-size: 2.2rem;">📄 Upload Study Notes PDF</h2>
+      <p style="font-size: 1.3rem; opacity: 0.85; line-height: 1.3;">Select a PDF document containing your chapters, or paste text/JSON notes below. You can also load the default question bank instantly.</p>
       
-      <input type="file" id="jsonFileInput" accept=".json,.txt" style="font-size: 0.85rem; width: 100%; cursor: pointer;" onchange="handleFileUpload(event)">
-      <textarea id="gatewayInput" rows="6" style="width:100%; font-size:0.85rem; padding:0.75rem;" placeholder="Paste JSON array or extracted web source text here..."></textarea>
+      <div style="border: 2px dashed var(--border); padding: 1rem; border-radius: 1rem; background: rgba(0,0,0,0.01);">
+        <label style="display:block; margin-bottom:0.5rem; font-weight:700;">Upload PDF File:</label>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="font-size: 1.1rem; width: 100%; cursor: pointer;" onchange="handlePDFUpload(event)">
+      </div>
+
+      <textarea id="gatewayInput" rows="4" style="width:100%; font-size:1.2rem; padding:0.75rem;" placeholder="Or paste extracted text or JSON notes here..."></textarea>
       
       <div style="display: flex; gap: 1rem;">
-        <button class="back-btn" style="flex: 1; justify-content: center; padding: 0.75rem;" onclick="initializeWithUpload()">Launch With Custom Data</button>
-        <button style="flex: 1; justify-content: center; padding: 0.75rem; background: var(--border);" onclick="loadDefaultPool()">Load Default 20 Chapters</button>
+        <button class="back-btn" style="flex: 1; justify-content: center; padding: 0.6rem;" onclick="initializeWithUpload()">Launch With Custom Data</button>
+        <button style="flex: 1; justify-content: center; padding: 0.6rem; background: var(--border); color: #2c2c2c;" onclick="loadDefaultPool()">Load Default Bank</button>
       </div>
     </div>
   </div>
 
   <header id="topControlsBar" style="display:none;">
-    <h1><span id="headerIcon">🏛️</span> <span id="headerTitle">EA Exam Part 2 Suite</span></h1>
+    <h1><span id="headerIcon">📖</span> <span id="headerTitle">EA Exam Part 2 Suite</span></h1>
     <div class="controls-bar">
-      <button onclick="toggleFeedModal()" style="border-color: var(--warning); color: var(--warning);">📥 Import Fresh Web Feed</button>
+      <button onclick="toggleFeedModal()" style="border-color: var(--warning); color: var(--warning);">📥 Import Web Feed</button>
       <button onclick="toggleCalc()">🧮 Calculator</button>
-      <button class="back-btn" id="mainMenuBtn" onclick="switchMode('dashboard')" style="display:none;">← Main Menu</button>
+      <button class="back-btn" id="mainMenuBtn" onclick="switchMode('dashboard')" style="display:none;">← Notebook Menu</button>
 
       <div id="gameplayControls" style="display:none; gap: 0.75rem; align-items: center;">
         <select id="chapterSelect" onchange="filterChapter(this.value)">
           <option value="all">All Chapters (Randomized)</option>
         </select>
-        <button onclick="generateFreshBatch()">⚡ Randomize Pool</button>
+        <button onclick="generateFreshBatch()">⚡ Shuffle Pool</button>
       </div>
     </div>
   </header>
@@ -214,11 +223,11 @@
   <!-- PERSISTENT STUDY NOTE CONTAINER -->
   <div class="study-note-container" id="studyNoteContainer">
     <div class="study-note-header">
-      <span>📝 Persistent Weak Spot Cheat Sheet</span>
-      <button style="font-size: 0.75rem; padding: 0.25rem 0.6rem;" onclick="clearWeakSpots()">Clear Pool</button>
+      <span>📝 Handwritten Weak Spot Cheat Sheet</span>
+      <button style="font-size: 1rem; padding: 0.1rem 0.5rem;" onclick="clearWeakSpots()">Clear Sheet</button>
     </div>
     <ul class="study-note-list" id="studyNoteList">
-      <li>No weak spots detected yet! Play games and miss questions to build your personalized cheat sheet.</li>
+      <li>No trouble spots jotted down yet! Miss questions in games to build your custom notes.</li>
     </ul>
   </div>
 
@@ -227,19 +236,19 @@
   <!-- WEB FEED IMPORTER MODAL -->
   <div class="feed-modal" id="feedModal">
     <header>
-      <strong style="font-size:0.85rem; color: var(--warning);">📥 Import Web Content / JSON</strong>
-      <button style="padding:0.1rem 0.4rem; font-size:0.75rem;" onclick="toggleFeedModal()">✕</button>
+      <strong style="font-size:1.3rem; color: var(--warning);">📥 Quick Note / Web Import</strong>
+      <button style="padding:0.1rem 0.4rem; font-size:1rem;" onclick="toggleFeedModal()">✕</button>
     </header>
-    <p style="font-size: 0.78rem; opacity: 0.8; margin-bottom: 0.75rem;">Paste web text or web JSON arrays to extract and inject questions directly into active gameplay.</p>
-    <textarea id="feedInput" rows="5" style="width:100%; font-size:0.8rem; margin-bottom:0.75rem; padding:0.5rem;" placeholder='Paste JSON array or raw notes here...'></textarea>
-    <button class="back-btn" style="width:100%; justify-content:center; padding:0.5rem;" onclick="processWebFeed()">Extract & Inject Questions</button>
+    <p style="font-size: 1.1rem; opacity: 0.85; margin-bottom: 0.75rem;">Paste extra notes or web content to generate new quiz prompts on the fly.</p>
+    <textarea id="feedInput" rows="4" style="width:100%; font-size:1.1rem; margin-bottom:0.75rem; padding:0.5rem;" placeholder='Paste notes or raw text here...'></textarea>
+    <button class="back-btn" style="width:100%; justify-content:center; padding:0.5rem;" onclick="processWebFeed()">Convert to Quiz Question</button>
   </div>
 
   <!-- SCRATCHPAD CALCULATOR -->
   <div class="calc-modal" id="calcModal">
     <header>
-      <strong style="font-size:0.85rem;">Tax Scratchpad</strong>
-      <button style="padding:0.1rem 0.4rem; font-size:0.75rem;" onclick="toggleCalc()">✕</button>
+      <strong style="font-size:1.3rem;">Quick Calculator</strong>
+      <button style="padding:0.1rem 0.4rem; font-size:1rem;" onclick="toggleCalc()">✕</button>
     </header>
     <input type="text" class="calc-display" id="calcDisplay" readonly value="0">
     <div class="calc-grid">
@@ -270,14 +279,32 @@
     let activeQuestions = [];
     let isFlipped = false;
 
-    function handleFileUpload(event) {
+    // PDF Uploader handler using PDF.js
+    async function handlePDFUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById("gatewayInput").value = e.target.result;
-      };
-      reader.readAsText(file);
+
+      document.getElementById("gatewayInput").value = "Reading PDF document pages...";
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdfDoc = await loadingTask.promise;
+
+        let fullText = '';
+        for (let i = 1; i <= pdfDoc.numPages; i++) {
+          const page = await pdfDoc.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(' ');
+          fullText += pageText + '\n';
+        }
+
+        document.getElementById("gatewayInput").value = fullText;
+        alert(`Successfully extracted text from ${pdfDoc.numPages} PDF page(s)! Click "Launch With Custom Data" to start.`);
+      } catch (err) {
+        console.error(err);
+        alert("Error reading PDF file. Please try another file or paste text directly.");
+        document.getElementById("gatewayInput").value = "";
+      }
     }
 
     function buildRandomizedQuestion(id, chapterNum, topicName, stem, correctText, wrongTexts, explanationText) {
@@ -310,8 +337,8 @@
 
     function initializeWithUpload() {
       const rawText = document.getElementById("gatewayInput").value.trim();
-      if (!rawText) {
-        alert("Please paste data or choose the default pool.");
+      if (!rawText || rawText === "Reading PDF document pages...") {
+        alert("Please upload a PDF or enter valid text notes.");
         return;
       }
 
@@ -321,42 +348,40 @@
           masterQuestions = parsed.map((item, idx) => ({
             id: item.id || (1000 + idx),
             chapter: item.chapter || 1,
-            chapterName: item.chapterName || `Chapter ${item.chapter || 1}: Extracted Web Content`,
-            topicShort: item.topicShort || "Web Data",
+            chapterName: item.chapterName || `Chapter ${item.chapter || 1}: Uploaded Content`,
+            topicShort: item.topicShort || "Custom Data",
             question: item.question || item.stem,
-            options: item.options || [item.correct, "Incorrect Option A", "Incorrect Option B", "Incorrect Option C"],
+            options: item.options || [item.correct, "Alternative Option A", "Alternative Option B", "Alternative Option C"],
             answer: item.answer !== undefined ? item.answer : 0,
             explanation: item.explanation || "Extracted successfully from custom JSON source."
           }));
-          alert(`Successfully extracted and loaded ${masterQuestions.length} questions from custom content!`);
           completeGatewaySetup();
           return;
         }
       } catch (e) {
-        // Advanced raw text extraction: Split by paragraphs/lines to create multiple extraction nodes
-        const lines = rawText.split('\n').filter(l => l.trim().length > 15);
-        if (lines.length > 0) {
-          masterQuestions = lines.map((line, idx) => ({
+        // Break down raw text or PDF content into structured review items line by line/paragraph
+        const paragraphs = rawText.split('\n').filter(l => l.trim().length > 20);
+        if (paragraphs.length > 0) {
+          masterQuestions = paragraphs.slice(0, 40).map((para, idx) => ({
             id: 5000 + idx,
             chapter: (idx % 20) + 1,
-            chapterName: `Extracted Chapter ${(idx % 20) + 1}`,
-            topicShort: "Web Extracted Item",
-            question: `Based on extracted web content: "${line.trim()}" — What is the correct compliance treatment?`,
+            chapterName: `Uploaded Note Segment ${(idx % 20) + 1}`,
+            topicShort: "PDF Segment",
+            question: `Based on your uploaded notes: "${para.trim().substring(0, 90)}..." — Which compliance action applies?`,
             options: [
-              `Must be fully accounted for under regular operating guidelines.`,
-              `Exempt from all reporting thresholds.`,
-              `Subject to immediate Section 481(a) penalty adjustments.`,
-              `Deferred indefinitely until liquidation.`
+              `Must be fully accounted for under standard operating guidelines.`,
+              `Exempt from all reporting thresholds and schedules.`,
+              `Subject to immediate Section adjustments.`,
+              `Deferred indefinitely until final business dissolution.`
             ],
             answer: 0,
-            explanation: `Extracted directly from provided text batch: ${line.trim()}`
+            explanation: `Derived from uploaded text snippet: ${para.trim().substring(0, 80)}...`
           }));
-          alert(`Successfully parsed and extracted ${masterQuestions.length} questions from your text block!`);
           completeGatewaySetup();
           return;
         }
       }
-      alert("Could not extract valid structures. Please check format.");
+      alert("Could not structure valid notes. Please ensure clear text blocks.");
     }
 
     function completeGatewaySetup() {
@@ -381,42 +406,23 @@
       const rawText = document.getElementById("feedInput").value.trim();
       if (!rawText) return;
 
-      try {
-        const parsed = JSON.parse(rawText);
-        if (Array.isArray(parsed)) {
-          parsed.forEach((item, idx) => {
-            masterQuestions.unshift({
-              id: 9000 + idx,
-              chapter: item.chapter || 1,
-              chapterName: `Web Feed Update: Ch ${item.chapter || 1}`,
-              topicShort: "Fresh Web Update",
-              question: item.question,
-              options: item.options,
-              answer: item.answer || 0,
-              explanation: item.explanation || "Imported directly from web source."
-            });
-          });
-          alert(`Successfully extracted ${parsed.length} questions from web feed JSON!`);
-        }
-      } catch (e) {
-        masterQuestions.unshift({
-          id: 9999 + Math.floor(Math.random() * 1000),
-          chapter: 1,
-          chapterName: "Latest Web & Tax Bulletin",
-          topicShort: "Regulatory Web Update",
-          question: `Regarding recent web updates: "${rawText.substring(0, 120)}..." — How does this impact reporting?`,
-          options: [
-            `Requires immediate attention and compliance adjustment on current year returns.`,
-            `Exempt from all IRS enforcement guidelines.`,
-            `Applies only retroactively to tax years prior to 2018.`,
-            `Nullifies corporate tax filing rules entirely.`
-          ],
-          answer: 0,
-          explanation: `Fresh web feed injection highlights current regulatory guidelines: ${rawText}`
-        });
-        alert("Successfully converted web text into an active study question!");
-      }
+      masterQuestions.unshift({
+        id: 9999 + Math.floor(Math.random() * 1000),
+        chapter: 1,
+        chapterName: "Quick Note Bulletin",
+        topicShort: "Custom Note",
+        question: `Regarding note: "${rawText.substring(0, 100)}..." — How should this be handled?`,
+        options: [
+          `Requires careful alignment with current regulatory schedules.`,
+          `Exempt from all filing rules.`,
+          `Applies strictly to past tax years prior to 2018.`,
+          `Nullifies standard corporate guidelines.`
+        ],
+        answer: 0,
+        explanation: `Custom imported note reminder: ${rawText}`
+      });
 
+      alert("Successfully converted note into an active quiz question!");
       document.getElementById("feedInput").value = "";
       toggleFeedModal();
       filterChapter(currentChapter);
@@ -446,18 +452,18 @@
       let data = foundKey ? tutorKnowledgeBase[foundKey] : null;
 
       if (!data) {
-        resContainer.innerHTML = `<div class="tutor-response"><h4>💡 Concept Breakdown: "${q.toUpperCase()}"</h4><p>Extracted rules emphasize checking pass-through rules, basis impacts, and proper IRS form placements.</p></div>`;
+        resContainer.innerHTML = `<div class="tutor-response"><h4>💡 Handwritten Note Review: "${q.toUpperCase()}"</h4><p>Check pass-through rules, basis impacts, and corresponding IRS form schedules in your uploaded PDF documents.</p></div>`;
         return;
       }
       resContainer.innerHTML = `<div class="tutor-response"><h4>📌 ${data.title}</h4><p>${data.rule}</p><br><strong>Example:</strong> ${data.example}</div>`;
     }
 
     function saveProgress() {
-      localStorage.setItem("ea_exam_progress", JSON.stringify({ currentMode, currentChapter, currentIndex, strikes, weakSpotPool, masterQuestions }));
+      localStorage.setItem("ea_exam_progress_cursive", JSON.stringify({ currentMode, currentChapter, currentIndex, strikes, weakSpotPool, masterQuestions }));
     }
 
     function loadProgress() {
-      const saved = localStorage.getItem("ea_exam_progress");
+      const saved = localStorage.getItem("ea_exam_progress_cursive");
       if (saved) {
         try {
           const state = JSON.parse(saved);
@@ -525,7 +531,7 @@
 
     function switchMode(mode) {
       if (masterQuestions.length === 0 && mode !== "dashboard") {
-        alert("Please upload or load content first!");
+        alert("Please upload PDF notes first!");
         return;
       }
       currentMode = mode;
@@ -542,7 +548,7 @@
         mainBtn.style.display = "none";
         gameCtrl.style.display = "none";
         pContainer.style.display = "none";
-        hIcon.innerText = "🏛️"; hTitle.innerText = "EA Exam Part 2 Mastery Suite";
+        hIcon.innerText = "📖"; hTitle.innerText = "My Study Notebook";
         renderDashboard();
       } else {
         mainBtn.style.display = "inline-flex";
@@ -550,13 +556,13 @@
         pContainer.style.display = mode === "tutor" ? "none" : "block";
         
         const titles = {
-          millionaire: ["💰", "Millionaire Tax Ladder"],
-          detective: ["🕵️", "Detective Casebook"],
-          flashcards: ["🎴", "EA Flashcard Deck"],
-          matrix: ["🖥️", "Matrix Terminal Mode"],
-          basis: ["⚠️", "Basis Tax Alert"],
-          weakspots: ["🎯", "Weak Spots Review Pool"],
-          tutor: ["👩‍🏫", "AI Interactive Tax Tutor"]
+          millionaire: ["💰", "Tax Millionaire Game"],
+          detective: ["🕵️", "Audit Detective Files"],
+          flashcards: ["🎴", "Handwritten Flashcards"],
+          matrix: ["🖥️", "Quick Practice Mode"],
+          basis: ["⚠️", "Basis Rule Practice"],
+          weakspots: ["🎯", "Trouble Spots Review"],
+          tutor: ["👩‍🏫", "AI Study Assistant"]
         };
         hIcon.innerText = titles[mode][0]; hTitle.innerText = titles[mode][1];
         filterChapter(currentChapter);
@@ -605,7 +611,7 @@
     function updateStudyNotes() {
       const noteList = document.getElementById("studyNoteList");
       if (weakSpotPool.length === 0) {
-        noteList.innerHTML = `<li>No weak spots detected yet! Play games and miss questions to build your personalized cheat sheet.</li>`;
+        noteList.innerHTML = `<li>No trouble spots jotted down yet! Miss questions in games to build your custom notes.</li>`;
         return;
       }
       let html = "";
@@ -620,31 +626,31 @@
       main.innerHTML = `
         <div class="dashboard-grid">
           <div class="game-card" onclick="switchMode('millionaire')">
-            <div><div class="card-icon">💰</div><div class="card-title">Millionaire Ladder</div><div class="card-desc">Climb the 15-question tax ladder extracted from your web repository.</div></div>
+            <div><div class="card-icon">💰</div><div class="card-title">Tax Millionaire</div><div class="card-desc">Climb the 15-question ladder based on your uploaded PDF notes.</div></div>
             <div class="card-badge">Game Mode</div>
           </div>
           <div class="game-card" onclick="switchMode('detective')">
-            <div><div class="card-icon">🕵️</div><div class="card-title">Detective Casebook</div><div class="card-desc">Investigate audit files and spot compliance errors.</div></div>
-            <div class="card-badge">Case File Mode</div>
+            <div><div class="card-icon">🕵️</div><div class="card-title">Audit Detective</div><div class="card-desc">Review case files and spot compliance errors.</div></div>
+            <div class="card-badge">Case File</div>
           </div>
           <div class="game-card" onclick="switchMode('tutor')">
-            <div><div class="card-icon">👩‍🏫</div><div class="card-title">AI Tax Tutor</div><div class="card-desc">Break down complex concepts instantly.</div></div>
-            <div class="card-badge" style="border-color:var(--accent); color:var(--accent);">NEW FEATURE</div>
+            <div><div class="card-icon">👩‍🏫</div><div class="card-title">Study Assistant</div><div class="card-desc">Look up topics and rules instantly.</div></div>
+            <div class="card-badge" style="color:var(--accent);">AI Helper</div>
           </div>
           <div class="game-card" onclick="switchMode('weakspots')">
-            <div><div class="card-icon">🎯</div><div class="card-title">Review Weak Spots</div><div class="card-desc">Drill strictly missed questions.</div></div>
-            <div class="card-badge" style="border-color:var(--danger); color:var(--danger);">${weakSpotPool.length} Missed</div>
+            <div><div class="card-icon">🎯</div><div class="card-title">Trouble Spots</div><div class="card-desc">Review questions you missed earlier.</div></div>
+            <div class="card-badge" style="color:var(--danger);">${weakSpotPool.length} Missed</div>
           </div>
           <div class="game-card" onclick="switchMode('flashcards')">
-            <div><div class="card-icon">🎴</div><div class="card-title">Flashcards</div><div class="card-desc">Rapid-fire term memorization.</div></div>
+            <div><div class="card-icon">🎴</div><div class="card-title">Flashcards</div><div class="card-desc">Flip through notes quickly.</div></div>
             <div class="card-badge">Study Mode</div>
           </div>
           <div class="game-card" onclick="switchMode('matrix')">
-            <div><div class="card-icon">🖥️</div><div class="card-title">Matrix Terminal</div><div class="card-desc">Retro code interface test.</div></div>
-            <div class="card-badge">Timed Practice</div>
+            <div><div class="card-icon">🖥️</div><div class="card-title">Quick Practice</div><div class="card-desc">Fast chapter review mode.</div></div>
+            <div class="card-badge">Practice</div>
           </div>
           <div class="game-card" onclick="switchMode('basis')">
-            <div><div class="card-icon">⚠️</div><div class="card-title">Basis Tax Alert</div><div class="card-desc">Focus strictly on high-yield basis rules.</div></div>
+            <div><div class="card-icon">⚠️</div><div class="card-title">Basis Alerts</div><div class="card-desc">Focus strictly on high-yield rules.</div></div>
             <div class="card-badge">High Yield</div>
           </div>
         </div>`;
@@ -659,14 +665,14 @@
       if (currentMode === "tutor") {
         main.innerHTML = `
           <div class="tutor-container">
-            <h3>👩‍🏫 AI Tax Tutor & Concept Explainer</h3>
+            <h3>👩‍🏫 Handwritten Study Assistant</h3>
             <div class="tutor-search-box">
-              <input type="text" id="tutorInput" placeholder="Enter tax concept..." onkeydown="if(event.key==='Enter') explainConcept()">
-              <button class="back-btn" onclick="explainConcept()">Explain</button>
+              <input type="text" id="tutorInput" placeholder="Type a concept or topic..." onkeydown="if(event.key==='Enter') explainConcept()">
+              <button class="back-btn" onclick="explainConcept()">Look Up</button>
             </div>
             <div class="quick-chips">
-              <span class="chip" onclick="explainConcept('macrs')">⚡ MACRS & Sec 179</span>
-              <span class="chip" onclick="explainConcept('partner basis')">⚡ Partner Basis</span>
+              <span class="chip" onclick="explainConcept('macrs')">💡 MACRS & Sec 179</span>
+              <span class="chip" onclick="explainConcept('partner basis')">💡 Partner Basis</span>
             </div>
             <div id="tutorResult"></div>
           </div>`;
@@ -674,7 +680,7 @@
       }
 
       if (activeQuestions.length === 0) {
-        main.innerHTML = `<div style="text-align:center; padding: 2rem;"><h3>🎉 No Questions Found</h3><p>Please load valid content via web feed or gateway.</p></div>`;
+        main.innerHTML = `<div style="text-align:center; padding: 2rem;"><h3>🎉 No Questions Found</h3><p>Please upload a PDF or load default notes.</p></div>`;
         return;
       }
 
@@ -686,18 +692,18 @@
           <div class="millionaire-layout">
             <div class="game-panel">
               <div class="strikes-bar">
-                <span>STRIKES: ${"❌".repeat(3 - strikes)}${"🔴".repeat(strikes)}</span>
-                <span style="font-size:0.85rem; opacity:0.8;">Q ${currentIndex + 1}/${activeQuestions.length}</span>
+                <span>MISTAKES: ${"❌".repeat(3 - strikes)}${"🔴".repeat(strikes)}</span>
+                <span style="font-size:1.1rem; opacity:0.8;">Q ${currentIndex + 1}/${activeQuestions.length}</span>
               </div>
               <h3>${q.chapterName}</h3>
-              <p style="margin-top: 1rem; font-size: 1.05rem; font-weight: 600; line-height:1.5;">${q.question}</p>
+              <p style="margin-top: 1rem; font-size: 1.4rem; font-weight: 600; line-height:1.3;">${q.question}</p>
               <div class="options-grid">
                 ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})"><b>${String.fromCharCode(65 + i)}:</b> ${opt}</button>`).join('')}
               </div>
               <div class="feedback" id="fb"></div>
             </div>
             <div class="ladder-panel">
-              <h4 style="margin-bottom:0.5rem; text-align:center;">PRIZE LADDER</h4>
+              <h4 style="margin-bottom:0.5rem; text-align:center; font-size: 1.3rem;">PRIZE LADDER</h4>
               ${prizeMoney.map((m, idx) => `<div class="ladder-step ${idx === currentIndex ? 'active' : ''}"><span>${idx + 1}</span><span>${m}</span></div>`).reverse().join('')}
             </div>
           </div>`;
@@ -705,22 +711,22 @@
         main.innerHTML = `
           <div class="detective-card">
             <div class="folder-tab">CASE FILE #${q.id}</div>
-            <h3>🕵️ EVIDENCE CASE: ${q.chapterName}</h3>
-            <p style="margin-top: 1.25rem; font-size: 1.05rem; line-height:1.5;">"${q.question}"</p>
+            <h3>🕵️ EVIDENCE: ${q.chapterName}</h3>
+            <p style="margin-top: 1.25rem; font-size: 1.4rem; line-height:1.3;">"${q.question}"</p>
             <div class="options-grid">
-              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Inspect ${String.fromCharCode(65 + i)}: ${opt}</button>`).join('')}
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Check ${String.fromCharCode(65 + i)}: ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
           </div>`;
       } else if (currentMode === "matrix") {
         main.innerHTML = `
           <div class="matrix-card">
-            <div style="display:flex; justify-content:space-between; font-family:monospace; margin-bottom:1rem;">
-              <span>SYSTEM: ONLINE</span><span>FIREWALL: ${"🛡️".repeat(strikes)}</span>
+            <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+              <span>NOTEBOOK PRACTICE</span><span>LIVES: ${"❤️".repeat(strikes)}</span>
             </div>
-            <p style="font-family: monospace; font-size: 1.05rem; line-height:1.5;">> ${q.question}</p>
+            <p style="font-size: 1.4rem; line-height:1.3;">${q.question}</p>
             <div class="options-grid">
-              ${q.options.map((opt, i) => `<button class="option-btn" style="font-family: monospace;" onclick="handleAnswer(${i})">[EXECUTE ${String.fromCharCode(65 + i)}] ${opt}</button>`).join('')}
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">[${String.fromCharCode(65 + i)}] ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
           </div>`;
@@ -728,17 +734,17 @@
         isFlipped = false;
         main.innerHTML = `
           <div class="game-panel" style="max-width:600px; text-align:center; cursor:pointer;" onclick="flip()">
-            <span style="font-size:0.85rem; font-weight:700; color:var(--accent);">${q.chapterName} (Card ${currentIndex + 1} of ${activeQuestions.length})</span>
+            <span style="font-size:1.1rem; font-weight:700; color:var(--accent);">${q.chapterName} (Card ${currentIndex + 1} of ${activeQuestions.length})</span>
             <div id="cardContent" style="min-height:180px; display:flex; align-items:center; justify-content:center; margin-top:1rem;">
-              <p style="font-size:1.15rem; font-weight:600; line-height:1.5;">${q.question}</p>
+              <p style="font-size:1.5rem; font-weight:600; line-height:1.3;">${q.question}</p>
             </div>
             <button class="option-btn" style="margin-top:1.5rem; justify-content:center; text-align:center;" onclick="event.stopPropagation(); nextFC();">Next Flashcard ➔</button>
           </div>`;
       } else if (currentMode === "basis") {
         main.innerHTML = `
           <div class="basis-card">
-            <h3 style="color:var(--danger);">⚠️ COMPLIANCE ALERT: ${q.chapterName}</h3>
-            <p style="margin-top: 1rem; font-weight:600; font-size:1.05rem; line-height:1.5;">${q.question}</p>
+            <h3 style="color:var(--danger);">⚠️ NOTEBOOK ALERT: ${q.chapterName}</h3>
+            <p style="margin-top: 1rem; font-weight:600; font-size:1.4rem; line-height:1.3;">${q.question}</p>
             <div class="options-grid">
               ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})"><b>Option ${String.fromCharCode(65 + i)}:</b> ${opt}</button>`).join('')}
             </div>
@@ -753,9 +759,9 @@
 
       if (idx === q.answer) {
         playSound('correct');
-        fb.style.background = "rgba(16, 185, 129, 0.15)";
+        fb.style.background = "rgba(16, 185, 129, 0.1)";
         fb.style.color = "var(--success)";
-        fb.innerHTML = `✓ Correct! ${q.explanation}`;
+        fb.innerHTML = `✓ Spot on! ${q.explanation}`;
         if (currentMode === "weakspots") removeFromWeakSpots(q.id);
 
         setTimeout(() => {
@@ -767,13 +773,13 @@
         playSound('wrong');
         strikes--;
         addToWeakSpots(q);
-        fb.style.background = "rgba(239, 68, 68, 0.15)";
+        fb.style.background = "rgba(239, 68, 68, 0.1)";
         fb.style.color = "var(--danger)";
         if (strikes <= 0) {
-          fb.innerHTML = `💥 3 STRIKES! Saved to Weak Spots & restarting chapter...`;
+          fb.innerHTML = `❌ 3 Mistakes! Added to Trouble Spots & restarting chapter...`;
           setTimeout(() => filterChapter(currentChapter), 2000);
         } else {
-          fb.innerHTML = `❌ Incorrect. Added to Weak Spots! ${strikes} strike(s) left!`;
+          fb.innerHTML = `❌ Not quite. Added to Trouble Spots! ${strikes} try(s) left!`;
         }
       }
     }
@@ -783,8 +789,8 @@
       const cardContent = document.getElementById("cardContent");
       isFlipped = !isFlipped;
       cardContent.innerHTML = isFlipped 
-        ? `<div><strong style="color:var(--accent);">ANSWER:</strong><br><br>${q.options[q.answer]}<br><br><small style="opacity:0.8;">${q.explanation}</small></div>`
-        : `<p style="font-size:1.15rem; font-weight:600; line-height:1.5;">${q.question}</p>`;
+        ? `<div><strong style="color:var(--accent); font-size:1.3rem;">ANSWER:</strong><br><br>${q.options[q.answer]}<br><br><small style="opacity:0.8; font-size:1.1rem;">${q.explanation}</small></div>`
+        : `<p style="font-size:1.5rem; font-weight:600; line-height:1.3;">${q.question}</p>`;
     }
 
     function nextFC() {
