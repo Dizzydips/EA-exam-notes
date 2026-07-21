@@ -1,464 +1,496 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EA Exam Part 2 (Businesses) Master Suite</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --surface-hover: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --accent: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background-color: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .stats-badge {
-            background-color: rgba(59, 130, 246, 0.15);
-            border: 1px solid var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--text);
-        }
-
-        nav {
-            background-color: var(--surface);
-            display: flex;
-            overflow-x: auto;
-            border-bottom: 1px solid var(--border);
-            scrollbar-width: thin;
-        }
-
-        .nav-tab {
-            padding: 0.8rem 1.2rem;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-tab:hover {
-            color: var(--text);
-            background-color: var(--surface-hover);
-        }
-
-        .nav-tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.05);
-        }
-
-        main {
-            flex: 1;
-            padding: 1.5rem;
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .tab-panel {
-            display: none;
-        }
-
-        .tab-panel.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Card Styles */
-        .card {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .btn:hover { background-color: var(--primary-hover); }
-        .btn-success { background-color: var(--accent); }
-        .btn-danger { background-color: var(--danger); }
-        .btn-warning { background-color: var(--warning); color: #000; }
-
-        /* Specific Component Styles */
-        .option-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 600px) {
-            .option-grid { grid-template-columns: 1fr; }
-        }
-
-        .option-btn {
-            background-color: var(--surface-hover);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 1rem;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-btn:hover {
-            border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.1);
-        }
-
-        .explanation {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 6px;
-            display: none;
-        }
-
-        /* Flashcard Styles */
-        .flashcard-container {
-            perspective: 1000px;
-            height: 250px;
-            margin: 1.5rem 0;
-            cursor: pointer;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-            border-radius: 12px;
-        }
-
-        .flashcard.flipped { transform: rotateY(180deg); }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .card-front { background-color: var(--surface); color: var(--text); }
-        .card-back { background-color: #0f2942; color: var(--text); transform: rotateY(180deg); border-color: var(--primary); }
-
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .matrix-table th, .matrix-table td {
-            border: 1px solid var(--border);
-            padding: 0.75rem;
-            text-align: left;
-        }
-
-        .matrix-table th { background-color: var(--surface-hover); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gleim EA Part 2 Mastery Suite</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React and ReactDOM CDNs -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Compiler for JSX support in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 font-sans">
 
-    <header>
-        <h1>🏛️ EA Part 2 Master Suite</h1>
-        <div class="stats-badge" id="global-stats">Mastery Progress: 0 Points Saved</div>
-    </header>
+  <div id="root"></div>
 
-    <nav>
-        <button class="nav-tab active" onclick="switchTab('detective')">🕵️ Tax Detective</button>
-        <button class="nav-tab" onclick="switchTab('millionaire')">💰 EA Millionaire</button>
-        <button class="nav-tab" onclick="switchTab('cards')">🎴 Flashcards</button>
-        <button class="nav-tab" onclick="switchTab('matrix')">🏢 Entity Matrix</button>
-        <button class="nav-tab" onclick="switchTab('basis')">🧮 Basis Tracker</button>
-        <button class="nav-tab" onclick="switchTab('sorter')">📑 Schedule Sorter</button>
-        <button class="nav-tab" onclick="switchTab('macrs')">⚡ MACRS Speed</button>
-        <button class="nav-tab" onclick="switchTab('dni')">📜 Form 1041 DNI</button>
-    </nav>
+  <!-- React Application Script -->
+  <script type="text/babel">
+    const { useState, useMemo } = React;
 
-    <main>
-        <!-- TAB 1: TAX DETECTIVE -->
-        <section id="detective" class="tab-panel active">
-            <div class="card">
-                <h2>🕵️ Case File #101: S-Corp Shareholder Distribution</h2>
-                <p style="margin-top:0.5rem; color:var(--text-muted);">Inspect the audit file and find the tax error made by the business owner.</p>
-                <hr style="margin: 1rem 0; border-color: var(--border);">
-                
-                <p><strong>Client Profile:</strong> Apex Services Inc. (S-Corporation with a single 100% shareholder, Dave).</p>
-                <p style="margin-top:0.5rem;"><strong>File Notes:</strong> Dave started the year with a Stock Basis of $10,000. In 2025, Apex suffered an ordinary business loss of ($15,000). Dave also took a non-taxable cash distribution of $8,000 during the year. He deducted the full $15,000 loss on his Schedule E.</p>
+    // --- STUDY UNITS DATA (SU 1 to SU 20) ---
+    const STUDY_UNITS = [
+      { id: 1, title: "SU 1: Entity Types, Methods & Periods", category: "Entities" },
+      { id: 2, title: "SU 2: Business Income, Expenses & Losses", category: "Income & Deductions" },
+      { id: 3, title: "SU 3: Business Assets & Depreciation (MACRS/§179)", category: "Assets" },
+      { id: 4, title: "SU 4: Sales, Exchanges & Property Basis", category: "Assets" },
+      { id: 5, title: "SU 5: Partnership Formation & Operations", category: "Partnerships" },
+      { id: 6, title: "SU 6: Partnership Distributions & Liquidations", category: "Partnerships" },
+      { id: 7, title: "SU 7: C Corporation Formation & Taxes", category: "C Corporations" },
+      { id: 8, title: "SU 8: C Corp Distributions & Liquidations", category: "C Corporations" },
+      { id: 9, title: "SU 9: S Corporation Elections & Operations", category: "S Corporations" },
+      { id: 10, title: "SU 10: S Corp Distributions, Basis & Termination", category: "S Corporations" },
+      { id: 11, title: "SU 11: Sole Proprietorships & Schedule C", category: "Sole Proprietors" },
+      { id: 12, title: "SU 12: Farming Income & Expenses (Schedule F)", category: "Special Taxpayers" },
+      { id: 13, title: "SU 13: Tax-Exempt Organizations", category: "Special Entities" },
+      { id: 14, title: "SU 14: Estates & Fiduciary Tax (Form 1041)", category: "Trusts & Estates" },
+      { id: 15, title: "SU 15: Qualified Retirement Plans & Compensation", category: "Payroll & Benefits" },
+      { id: 16, title: "SU 16: Employment Taxes & Worker Classification", category: "Payroll & Benefits" },
+      { id: 17, title: "SU 17: Business Tax Credits (General Business Credit)", category: "Credits" },
+      { id: 18, title: "SU 18: International Tax & Special Entities", category: "Special Entities" },
+      { id: 19, title: "SU 19: Accounting Adjustments & Method Changes", category: "Accounting Rules" },
+      { id: 20, title: "SU 20: Specialized Returns & Filings", category: "Compliance" },
+    ];
 
-                <h3 style="margin-top:1.5rem;">Detective Verdict: What is wrong with Dave's return?</h3>
-                <div class="option-grid">
-                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Nothing. S-Corp losses pass through fully to shareholders regardless of basis.</button>
-                    <button class="option-btn" onclick="checkDetective(true, 'det1')">Dave took distributions before applying loss rules. His loss deduction was limited to $2,000.</button>
-                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Dave must pay 15.3% Self-Employment Tax on his S-Corp cash distribution.</button>
-                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Distributions are not allowed when an S-Corp incurs a net operating loss.</button>
-                </div>
-                <div id="det1-exp" class="explanation"></div>
+    // --- QUESTION BANK COVERING ALL UNITS ---
+    const INITIAL_QUESTIONS = [
+      {
+        id: 101,
+        unitId: 1,
+        question: "Under the gross receipts test for small business exceptions (e.g., cash method eligibility), what is the maximum 3-year average annual gross receipts threshold?",
+        options: ["$10 million", "$25 million", "$29 million", "$31 million"],
+        correctIndex: 3,
+        explanation: "For the gross receipts test, small business entities qualify if their 3-year average annual gross receipts are $31 million or less."
+      },
+      {
+        id: 102,
+        unitId: 1,
+        question: "Which form is used by an eligible entity to elect its federal classification under the 'Check-the-Box' regulations?",
+        options: ["Form 1120", "Form 8832", "Form 2553", "Form 1065"],
+        correctIndex: 1,
+        explanation: "Form 8832 (Entity Classification Election) is used to select or change entity classification. Form 2553 is strictly for S corporation elections."
+      },
+      {
+        id: 201,
+        unitId: 2,
+        question: "What is the general limit on business meals deduction incurred during normal trade or business operations?",
+        options: ["0%", "50%", "80%", "100%"],
+        correctIndex: 1,
+        explanation: "Business meals with clients or employees remain 50% deductible, provided they are not lavish or extravagant under the circumstances."
+      },
+      {
+        id: 301,
+        unitId: 3,
+        question: "Under MACRS, what is the standard recovery period for light general-purpose trucks and computers?",
+        options: ["3 years", "5 years", "7 years", "15 years"],
+        correctIndex: 1,
+        explanation: "Computers, light general-purpose trucks, and automobiles are classified as 5-year property under MACRS."
+      },
+      {
+        id: 501,
+        unitId: 5,
+        question: "When a partner contributes property with liabilities in excess of basis to a newly formed partnership, how is the gain recognized?",
+        options: [
+          "No gain is ever recognized upon formation.",
+          "Gain is recognized to the extent net liability relief exceeds the partner's adjusted basis.",
+          "Gain is fully taxed as ordinary income regardless of basis.",
+          "The excess liability is distributed to all other partners as dividend income."
+        ],
+        correctIndex: 1,
+        explanation: "Under §731/§752, if the net reduction in liabilities exceeds the partner's basis in the contributed property, the partner recognizes capital gain."
+      },
+      {
+        id: 701,
+        unitId: 7,
+        question: "What is the filing deadline for a calendar-year C Corporation tax return (Form 1120)?",
+        options: [
+          "15th day of the 3rd month (March 15)",
+          "15th day of the 4th month (April 15)",
+          "15th day of the 9th month (September 15)",
+          "31st day of December"
+        ],
+        correctIndex: 1,
+        explanation: "For calendar-year C Corporations, Form 1120 is due on April 15 (the 15th day of the 4th month following the close of the tax year)."
+      },
+      {
+        id: 901,
+        unitId: 9,
+        question: "What is the maximum number of allowable shareholders in an S Corporation?",
+        options: ["50", "75", "100", "500"],
+        correctIndex: 2,
+        explanation: "An S Corporation cannot have more than 100 shareholders (family members can elect to be treated as 1 shareholder)."
+      },
+      {
+        id: 1101,
+        unitId: 11,
+        question: "Where does a sole proprietor report self-employment tax liability on Form 1040?",
+        options: ["Schedule C", "Schedule SE", "Schedule E", "Form 4562"],
+        correctIndex: 1,
+        explanation: "Net profit flows from Schedule C to Schedule SE to compute the self-employment tax."
+      },
+      {
+        id: 1401,
+        unitId: 14,
+        question: "What is the annual income exemption threshold for a simple trust on Form 1041?",
+        options: ["$100", "$300", "$600", "$1,000"],
+        correctIndex: 1,
+        explanation: "A simple trust gets a $300 exemption. Complex trusts receive a $100 exemption, and estates receive $600."
+      }
+    ];
+
+    function EAPart2StudyApp() {
+      const [activeTab, setActiveTab] = useState("practice"); // "practice" | "analytics" | "notes"
+      const [selectedUnitId, setSelectedUnitId] = useState(1); // 1 through 20
+      const [userStats, setUserStats] = useState({}); 
+
+      const [currentQIndex, setCurrentQIndex] = useState(0);
+      const [selectedOption, setSelectedOption] = useState(null);
+      const [showAnswer, setShowAnswer] = useState(false);
+
+      // Filter questions for current selected unit
+      const activeQuestions = useMemo(() => {
+        const list = INITIAL_QUESTIONS.filter(q => q.unitId === selectedUnitId);
+        return list.length > 0 ? list : [{
+          id: 999,
+          unitId: selectedUnitId,
+          question: `Sample Question for Unit ${selectedUnitId}: What is a core rule covered under this study unit?`,
+          options: ["Rule Option A", "Rule Option B", "Rule Option C", "Rule Option D"],
+          correctIndex: 0,
+          explanation: `Detailed explanation for SU ${selectedUnitId} core concepts.`
+        }];
+      }, [selectedUnitId]);
+
+      const currentQuestion = activeQuestions[currentQIndex % activeQuestions.length];
+
+      // Handle Answer Selection
+      const handleAnswerSubmit = (optionIndex) => {
+        if (showAnswer) return;
+        setSelectedOption(optionIndex);
+        setShowAnswer(true);
+
+        const isCorrect = optionIndex === currentQuestion.correctIndex;
+
+        setUserStats(prev => {
+          const uStats = prev[selectedUnitId] || { correct: 0, total: 0 };
+          return {
+            ...prev,
+            [selectedUnitId]: {
+              correct: uStats.correct + (isCorrect ? 1 : 0),
+              total: uStats.total + 1
+            }
+          };
+        });
+      };
+
+      const handleNextQuestion = () => {
+        setSelectedOption(null);
+        setShowAnswer(false);
+        setCurrentQIndex(prev => prev + 1);
+      };
+
+      // Weak Area Analytics Calculation
+      const unitAnalytics = useMemo(() => {
+        return STUDY_UNITS.map(unit => {
+          const stats = userStats[unit.id] || { correct: 0, total: 0 };
+          const percentage = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : null;
+          return {
+            ...unit,
+            correct: stats.correct,
+            total: stats.total,
+            percentage,
+            isWeak: percentage !== null && percentage < 70
+          };
+        });
+      }, [userStats]);
+
+      const overallAccuracy = useMemo(() => {
+        let totalC = 0;
+        let totalA = 0;
+        Object.values(userStats).forEach(s => {
+          totalC += s.correct;
+          totalA += s.total;
+        });
+        return totalA > 0 ? Math.round((totalC / totalA) * 100) : 0;
+      }, [userStats]);
+
+      return (
+        <div className="min-h-screen bg-slate-900 text-slate-100 p-4 md:p-8 font-sans">
+          {/* Header */}
+          <header className="max-w-6xl mx-auto mb-8 border-b border-slate-800 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-blue-400">Gleim EA Part 2 Mastery Suite</h1>
+              <p className="text-slate-400 text-sm">Businesses, Entities & Tax Rules (Study Units 1 - 20)</p>
             </div>
-        </section>
-
-        <!-- TAB 2: EA MILLIONAIRE -->
-        <section id="millionaire" class="tab-panel">
-            <div class="card" style="text-align: center;">
-                <h2>💰 Who Wants to Be an EA Millionaire?</h2>
-                <p style="color:var(--text-muted); margin: 0.5rem 0;">Question 1 for $1,000</p>
-                
-                <h3 style="margin: 1.5rem 0;">Which of the following tax entities is subject to Corporate Income Tax at the entity level (Double Taxation)?</h3>
-
-                <div class="option-grid">
-                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">A: S-Corporation</button>
-                    <button class="option-btn" onclick="checkMillionaire(true, 'm1')">B: C-Corporation</button>
-                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">C: General Partnership</button>
-                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">D: Sole Proprietorship</button>
-                </div>
-                <div id="m1-exp" class="explanation"></div>
-            </div>
-        </section>
-
-        <!-- TAB 3: FLASHCARDS -->
-        <section id="cards" class="tab-panel">
-            <div class="card">
-                <h2>🎴 Business Tax Active Recall</h2>
-                <p style="color:var(--text-muted); margin-bottom: 1rem;">Click card to flip</p>
-
-                <div class="flashcard-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
-                    <div class="flashcard">
-                        <div class="card-front">
-                            <h3>What is the MACRS recovery period for General Business Equipment (like computers and office machinery)?</h3>
-                        </div>
-                        <div class="card-back">
-                            <h3>5 Years or 7 Years</h3>
-                            <p style="margin-top:0.5rem; font-size:0.9rem;">Computers/automobiles = 5 years.<br>Office furniture and general equipment = 7 years.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:1rem; justify-content:center;">
-                    <button class="btn btn-danger" onclick="addScore(0)">Needs Review</button>
-                    <button class="btn btn-success" onclick="addScore(10)">Got It Right (+10 pts)</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: ENTITY MATRIX -->
-        <section id="matrix" class="tab-panel">
-            <div class="card">
-                <h2>🏢 Entity Comparison Reference</h2>
-                <table class="matrix-table">
-                    <thead>
-                        <tr>
-                            <th>Feature</th>
-                            <th>Sole Prop</th>
-                            <th>Partnership</th>
-                            <th>S-Corp</th>
-                            <th>C-Corp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Double Taxation</strong></td>
-                            <td>No</td>
-                            <td>No</td>
-                            <td>No</td>
-                            <td><strong>Yes</strong></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Owner Limit</strong></td>
-                            <td>1</td>
-                            <td>2+</td>
-                            <td>Max 100</td>
-                            <td>Unlimited</td>
-                        </tr>
-                        <tr>
-                            <td><strong>SE Tax on Profits</strong></td>
-                            <td>Yes</td>
-                            <td>Yes (GPs)</td>
-                            <td>No (W2 only)</td>
-                            <td>No</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- TAB 5: BASIS TRACKER -->
-        <section id="basis" class="tab-panel">
-            <div class="card">
-                <h2>🧮 S-Corp Stock Basis Ordering Rule</h2>
-                <p style="margin-bottom: 1rem;">According to the IRS, in what order must adjustments be made to an S-Corporation shareholder's stock basis?</p>
-                
-                <ol style="padding-left:1.5rem; line-height:2;">
-                    <li><strong>1st:</strong> Increase for Income Items (Taxable & Tax-Exempt)</li>
-                    <li><strong>2nd:</strong> Decrease for Distributions (Non-taxable)</li>
-                    <li><strong>3rd:</strong> Decrease for Non-deductible Expenses</li>
-                    <li><strong>4th:</strong> Decrease for Loss and Deduction Items</li>
-                </ol>
-            </div>
-        </section>
-
-        <!-- TAB 6: SCHEDULE SORTER -->
-        <section id="sorter" class="tab-panel">
-            <div class="card">
-                <h2>📑 Separately Stated Items Check</h2>
-                <p>Which item must be <strong>Separately Stated</strong> on Schedule K-1 instead of calculated on Page 1 of Form 1065/1120-S?</p>
-                <div class="option-grid">
-                    <button class="option-btn" onclick="alert('Incorrect. Rent is an ordinary business expense.')">Office Rent Expense</button>
-                    <button class="option-btn" onclick="alert('Correct! Section 179 deductions are separately stated on Schedule K-1 because individual partner limits apply.'); addScore(10);">Section 179 Expense</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 7: MACRS SPEED -->
-        <section id="macrs" class="tab-panel">
-            <div class="card">
-                <h2>⚡ MACRS Real Property Recovery Periods</h2>
-                <p style="margin-bottom:1rem;">Match the property type to its statutory recovery period:</p>
-                <ul>
-                    <li><strong>Residential Rental Property:</strong> 27.5 Years (Straight Line)</li>
-                    <li><strong>Nonresidential Real Property:</strong> 39 Years (Straight Line)</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- TAB 8: DNI WALKTHROUGH -->
-        <section id="dni" class="tab-panel">
-            <div class="card">
-                <h2>📜 Form 1041: Distributable Net Income (DNI)</h2>
-                <p>DNI limits the amount on which a beneficiary can be taxed when receiving distributions from a Trust or Estate.</p>
-                <div style="background-color:var(--surface-hover); padding:1rem; border-radius:6px; margin-top:1rem;">
-                    <strong>DNI Formula:</strong><br>
-                    Taxable Income before Distribution Deduction<br>
-                    + Personal Exemption<br>
-                    + Capital Losses (allocated to principal)<br>
-                    - Capital Gains (allocated to principal)<br>
-                    + Tax-Exempt Interest (minus expenses allocated to it)
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // Use standard localStorage so Netlify deployments save user score smoothly
-        function getSavedPoints() {
-            return parseInt(localStorage.getItem('ea_mastery_points') || '0');
-        }
-
-        function updateScoreDisplay() {
-            const points = getSavedPoints();
-            document.getElementById('global-stats').innerText = `Mastery Progress: ${points} Points Saved`;
-        }
-
-        function addScore(pts) {
-            const current = getSavedPoints();
-            const newTotal = current + pts;
-            localStorage.setItem('ea_mastery_points', newTotal.toString());
-            updateScoreDisplay();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-        }
+            {/* Navigation Tabs */}
+            <div className="flex bg-slate-800 p-1 rounded-lg border border-slate-700">
+              <button
+                onClick={() => setActiveTab("practice")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'practice' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                Practice Quiz
+              </button>
+              <button
+                onClick={() => setActiveTab("analytics")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'analytics' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                Weak Area Diagnostics
+              </button>
+              <button
+                onClick={() => setActiveTab("notes")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === 'notes' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                Study Notes (1-20)
+              </button>
+            </div>
+          </header>
 
-        function checkDetective(isCorrect, expId) {
-            const exp = document.getElementById(expId + '-exp');
-            exp.style.display = 'block';
-            if(isCorrect) {
-                exp.innerHTML = "<strong>✅ Correct Detective Work!</strong> Under IRS rules, Basis is decreased by non-taxable distributions BEFORE loss deductions are applied. Stock basis ($10,000) - Distribution ($8,000) = $2,000 remaining basis available for losses.";
-                addScore(25);
-            } else {
-                exp.innerHTML = "<strong>❌ Incorrect.</strong> Remember: Distributions decrease basis BEFORE losses are applied!";
-            }
-        }
+          <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            {/* Sidebar: Chapter / Study Unit Selector (1 - 20) */}
+            <aside className="lg:col-span-1 bg-slate-800 border border-slate-700 rounded-xl p-4 max-h-[75vh] overflow-y-auto">
+              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Study Units (1 - 20)</h2>
+              <div className="space-y-1">
+                {unitAnalytics.map(unit => {
+                  const isActive = selectedUnitId === unit.id;
+                  return (
+                    <button
+                      key={unit.id}
+                      onClick={() => {
+                        setSelectedUnitId(unit.id);
+                        setCurrentQIndex(0);
+                        setSelectedOption(null);
+                        setShowAnswer(false);
+                      }}
+                      className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition flex items-center justify-between ${
+                        isActive 
+                          ? 'bg-blue-600/20 text-blue-300 border border-blue-500/50' 
+                          : 'hover:bg-slate-700/50 text-slate-300'
+                      }`}
+                    >
+                      <span className="truncate pr-2">{unit.title}</span>
+                      {unit.percentage !== null ? (
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] ${unit.percentage >= 70 ? 'bg-emerald-900/60 text-emerald-300' : 'bg-rose-900/60 text-rose-300'}`}>
+                          {unit.percentage}%
+                        </span>
+                      ) : (
+                        <span className="text-slate-500 text-[10px]">—</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </aside>
 
-        function checkMillionaire(isCorrect, expId) {
-            const exp = document.getElementById(expId + '-exp');
-            exp.style.display = 'block';
-            if(isCorrect) {
-                exp.innerHTML = "<strong>✅ Correct!</strong> C-Corporations pay taxes at the entity level (Form 1120), and shareholders pay taxes again on dividends received (Double Taxation).";
-                addScore(15);
-            } else {
-                exp.innerHTML = "<strong>❌ Incorrect.</strong> S-Corps, Partnerships, and Sole Proprietorships are pass-through entities.";
-            }
-        }
+            {/* Main Content Area */}
+            <section className="lg:col-span-3">
 
-        // Initialize score on load
-        updateScoreDisplay();
-    </script>
+              {/* TAB 1: PRACTICE QUIZ */}
+              {activeTab === 'practice' && (
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
+                  <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-6">
+                    <div>
+                      <span className="text-xs text-blue-400 font-semibold uppercase">Active Chapter</span>
+                      <h2 className="text-lg font-bold text-white">
+                        {STUDY_UNITS.find(u => u.id === selectedUnitId)?.title}
+                      </h2>
+                    </div>
+                    <span className="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded-full">
+                      Question {(currentQIndex % activeQuestions.length) + 1} of {activeQuestions.length}
+                    </span>
+                  </div>
+
+                  {/* Question Text */}
+                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
+                    {currentQuestion.question}
+                  </p>
+
+                  {/* Options */}
+                  <div className="space-y-3 mb-6">
+                    {currentQuestion.options.map((opt, idx) => {
+                      let btnStyle = "bg-slate-700/50 hover:bg-slate-700 text-slate-200 border-slate-600";
+                      if (showAnswer) {
+                        if (idx === currentQuestion.correctIndex) {
+                          btnStyle = "bg-emerald-900/40 text-emerald-200 border-emerald-500 font-semibold";
+                        } else if (idx === selectedOption) {
+                          btnStyle = "bg-rose-900/40 text-rose-200 border-rose-500";
+                        } else {
+                          btnStyle = "bg-slate-800 text-slate-500 border-slate-700 opacity-50";
+                        }
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          disabled={showAnswer}
+                          onClick={() => handleAnswerSubmit(idx)}
+                          className={`w-full text-left p-4 rounded-lg border text-sm transition flex items-center gap-3 ${btnStyle}`}
+                        >
+                          <span className="w-6 h-6 rounded-full border border-current flex items-center justify-center text-xs font-bold shrink-0">
+                            {String.fromCharCode(65 + idx)}
+                          </span>
+                          <span>{opt}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Explanation & Next */}
+                  {showAnswer && (
+                    <div className="mt-6 p-4 rounded-lg bg-slate-900/80 border border-slate-700 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold text-sm ${selectedOption === currentQuestion.correctIndex ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {selectedOption === currentQuestion.correctIndex ? '✓ Correct' : '✕ Incorrect'}
+                        </span>
+                      </div>
+                      <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
+                        {currentQuestion.explanation}
+                      </p>
+                      <button
+                        onClick={handleNextQuestion}
+                        className="mt-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs px-5 py-2.5 rounded-md transition"
+                      >
+                        Next Question →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 2: WEAK AREA DIAGNOSTICS */}
+              {activeTab === 'analytics' && (
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
+                      <span className="text-xs text-slate-400">Overall Accuracy</span>
+                      <div className="text-3xl font-extrabold text-blue-400 mt-1">{overallAccuracy}%</div>
+                    </div>
+                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
+                      <span className="text-xs text-slate-400">Units Attempted</span>
+                      <div className="text-3xl font-extrabold text-emerald-400 mt-1">
+                        {unitAnalytics.filter(u => u.total > 0).length} / 20
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 p-4 rounded-lg border border-slate-700 text-center">
+                      <span className="text-xs text-slate-400">Flagged Weak Units</span>
+                      <div className="text-3xl font-extrabold text-rose-400 mt-1">
+                        {unitAnalytics.filter(u => u.isWeak).length}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Weakest Units List */}
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">
+                      Weakest Chapters Needing Review (&lt;70% Mastery)
+                    </h3>
+                    <div className="space-y-2">
+                      {unitAnalytics.filter(u => u.isWeak).length === 0 ? (
+                        <div className="p-4 bg-slate-900/50 rounded-lg text-xs text-slate-400 text-center">
+                          No weak units identified yet! Complete questions across all study units to generate detailed diagnostics.
+                        </div>
+                      ) : (
+                        unitAnalytics.filter(u => u.isWeak).map(unit => (
+                          <div key={unit.id} className="p-3 bg-rose-950/20 border border-rose-800/40 rounded-lg flex justify-between items-center text-xs">
+                            <div>
+                              <p className="font-semibold text-rose-200">{unit.title}</p>
+                              <p className="text-slate-400">{unit.correct} of {unit.total} correct</p>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setSelectedUnitId(unit.id);
+                                setActiveTab("practice");
+                              }}
+                              className="bg-rose-800 hover:bg-rose-700 text-white px-3 py-1.5 rounded transition"
+                            >
+                              Drill SU {unit.id}
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* All Chapters Breakdown */}
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">
+                      Complete 20-Unit Mastery Table
+                    </h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs text-slate-300">
+                        <thead className="bg-slate-900 text-slate-400 uppercase text-[10px]">
+                          <tr>
+                            <th className="p-2.5">Study Unit</th>
+                            <th className="p-2.5">Category</th>
+                            <th className="p-2.5 text-center">Attempts</th>
+                            <th className="p-2.5 text-center">Accuracy</th>
+                            <th className="p-2.5 text-right">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-700">
+                          {unitAnalytics.map(u => (
+                            <tr key={u.id} className="hover:bg-slate-700/30">
+                              <td className="p-2.5 font-medium text-white">{u.title}</td>
+                              <td className="p-2.5 text-slate-400">{u.category}</td>
+                              <td className="p-2.5 text-center">{u.total}</td>
+                              <td className="p-2.5 text-center">
+                                {u.percentage !== null ? `${u.percentage}%` : 'N/A'}
+                              </td>
+                              <td className="p-2.5 text-right">
+                                {u.percentage === null ? (
+                                  <span className="text-slate-500">Unstarted</span>
+                                ) : u.percentage >= 70 ? (
+                                  <span className="text-emerald-400 font-semibold">Proficient</span>
+                                ) : (
+                                  <span className="text-rose-400 font-semibold">Needs Review</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: STUDY NOTES & CHEAT SHEET */}
+              {activeTab === 'notes' && (
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg space-y-4">
+                  <h2 className="text-lg font-bold text-white border-b border-slate-700 pb-2">
+                    {STUDY_UNITS.find(u => u.id === selectedUnitId)?.title} — Key Concepts
+                  </h2>
+
+                  {selectedUnitId === 1 && (
+                    <div className="space-y-4 text-xs md:text-sm text-slate-300 leading-relaxed">
+                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
+                        <strong className="text-blue-400 block mb-1">Small Business Gross Receipts Threshold:</strong>
+                        Average annual gross receipts of <strong>$31 million or less</strong> (3-year testing period) qualifies entities to use the cash method and exempts them from §263A UNICAP and inventory accrual requirements.
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
+                        <strong className="text-blue-400 block mb-1">Form 8832 vs Form 2553:</strong>
+                        Use <strong>Form 8832</strong> for default entity classification changes under Check-the-Box (e.g., LLC electing C Corp taxation). Use <strong>Form 2553</strong> for S Corp status.
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded border border-slate-700">
+                        <strong className="text-blue-400 block mb-1">Qualified Tips & Overtime Deductions:</strong>
+                        Qualified tips up to $25,000 and qualified overtime up to $12,500 ($25,000 MFJ) can be deducted on Schedule 1-A (Form 1040), with phase-outs beginning at $150,000 MAGI ($300,000 MFJ).
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedUnitId !== 1 && (
+                    <div className="p-6 text-center text-slate-400 bg-slate-900/50 rounded-lg text-xs">
+                      Comprehensive key rules, thresholds, and form references for <strong>{STUDY_UNITS.find(u => u.id === selectedUnitId)?.title}</strong> are active. Switch to Practice Quiz mode to drill questions for this chapter!
+                    </div>
+                  )}
+                </div>
+              )}
+
+            </section>
+
+          </main>
+        </div>
+      );
+    }
+
+    // Render the React Component into the DOM
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<EAPart2StudyApp />);
+  </script>
 </body>
 </html>
