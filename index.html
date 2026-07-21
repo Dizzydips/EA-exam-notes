@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EA Exam Part 2 - Interactive Suite</title>
   <style>
-    /* ==========================================================================
-       THEME PALETTES (Soft Pink & Sage Green Aesthetic)
-       ========================================================================== */
     :root {
       --bg-main: #f7f3f0;
       --text-main: #2d3732;
@@ -42,7 +39,6 @@
 
     main { flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 1rem 0; }
 
-    /* LAYOUT SPECIFICS */
     .millionaire-layout { display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; max-width: 950px; }
     .game-panel { flex: 1; min-width: 300px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1rem; padding: 1.5rem; }
     .ladder-panel { width: 260px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 1rem; padding: 1rem; display: flex; flex-direction: column; gap: 0.2rem; }
@@ -78,21 +74,18 @@
 
       <label for="chapterSelect">Chapter:</label>
       <select id="chapterSelect" onchange="filterChapter(this.value)">
-        <option value="all">All 20 Chapters (Randomized & Generated)</option>
-        <!-- Generated Chapters 1-20 -->
+        <option value="all">All 20 Chapters (Randomized)</option>
       </select>
 
-      <button onclick="generateFreshBatch()">⚡ Refresh / Generate New Questions</button>
+      <button onclick="generateFreshBatch()">⚡ Generate New Question Set</button>
     </div>
   </header>
 
-  <main id="mainContainer">
-    <!-- Dynamic Interface Injected Here -->
-  </main>
+  <main id="mainContainer"></main>
 
   <script>
     /* ==========================================================================
-       1. DYNAMIC QUESTION GENERATOR & DATABASE ENGINE (50+ BASE + GENERATOR)
+       1. IRS EA PART 2 CHAPTER TOPICS & QUESTION GENERATOR
        ========================================================================== */
     const chapterTopics = [
       "Sole Proprietorships & Schedule C", "Partnership Formation & Sec. 721", "Partnership Distributions & Basis",
@@ -104,7 +97,6 @@
       "Accounting Methods & Inventories", "Foreign Business Tax Basics"
     ];
 
-    // Populate Chapter Dropdown dynamically for Chapters 1-20
     const chapSelect = document.getElementById("chapterSelect");
     chapterTopics.forEach((topic, i) => {
       const opt = document.createElement("option");
@@ -113,63 +105,81 @@
       chapSelect.appendChild(opt);
     });
 
-    // Base Seed Question Pool
     let masterQuestions = [];
+
+    // Helper to shuffle choices and track correct answer position dynamically
+    function buildRandomizedQuestion(id, chapterNum, topicName, stem, correctText, wrongTexts, explanationText) {
+      let allOptions = [correctText, ...wrongTexts];
+      
+      // Shuffle choices array
+      for (let i = allOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+      }
+      
+      // Find where the correct answer ended up after shuffling (0, 1, 2, or 3)
+      const correctIdx = allOptions.indexOf(correctText);
+
+      return {
+        id: id,
+        chapter: chapterNum,
+        chapterName: `Chapter ${chapterNum}: ${topicName}`,
+        question: stem,
+        options: allOptions,
+        answer: correctIdx,
+        explanation: explanationText
+      };
+    }
 
     function generateQuestionPool() {
       masterQuestions = [];
       let idCounter = 1;
 
-      // Seed 3 structured questions per chapter = 60 Core Questions + Infinite Generator
       chapterTopics.forEach((topic, chIndex) => {
         const chapNum = chIndex + 1;
 
-        masterQuestions.push({
-          id: idCounter++,
-          chapter: chapNum,
-          chapterName: `Chapter ${chapNum}: ${topic}`,
-          question: `What is the primary tax rule regarding ${topic.toLowerCase()} when calculating net taxable income?`,
-          options: [
-            "Ordinary business deduction or pass-through treatment apply as mandated under the Internal Revenue Code.",
-            "Must be fully capitalized and amortized over 40 years without exception.",
-            "Taxed at a flat 50% penalty rate regardless of entity structure.",
-            "Completely tax-exempt for all federal and state return filings."
+        // Realistic EA Part 2 Question 1
+        masterQuestions.push(buildRandomizedQuestion(
+          idCounter++, chapNum, topic,
+          `Regarding ${topic}, which statement correctly reflects IRS tax treatment for federal filing?`,
+          `Pass-through income or entity specific tax rules under the Internal Revenue Code govern treatment on the appropriate schedules.`,
+          [
+            `All income in this chapter is taxed at a flat 37% penalty rate regardless of entity filing.`,
+            `No tax return filing is required if gross receipts are under $500,000.`,
+            `Disallowed entirely under Section 1031 tax rules.`
           ],
-          answer: 0,
-          explanation: `Under IRC rules for ${topic}, standard pass-through or business deduction rules apply.`
-        });
+          `IRC rules mandate specific entity-level or pass-through reporting rules for ${topic}.`
+        ));
 
-        masterQuestions.push({
-          id: idCounter++,
-          chapter: chapNum,
-          chapterName: `Chapter ${chapNum}: ${topic}`,
-          question: `In ${topic}, how are non-liquidating distributions or basis adjustments generally handled?`,
-          options: [
-            "Taxable as ordinary income immediately.",
-            "Reduces shareholder/partner basis first; distributions in excess of basis result in capital gain.",
-            "Increases total liability without affecting basis.",
-            "Disallowed completely under Section 1031."
-          ],
-          answer: 1,
-          explanation: "Distributions reduce basis first. Any excess distribution over remaining basis generates capital gain."
-        });
+        // Realistic EA Part 2 Question 2 (Basis & Distributions)
+        const randBase = (Math.floor(Math.random() * 6) + 3) * 1000;
+        const randDist = randBase + (Math.floor(Math.random() * 4) + 1) * 1000;
+        const gainVal = randDist - randBase;
 
-        // Dynamic Math / Numeric Generator for variety
-        const randomAmount = (Math.floor(Math.random() * 8) + 2) * 5000;
-        masterQuestions.push({
-          id: idCounter++,
-          chapter: chapNum,
-          chapterName: `Chapter ${chapNum}: ${topic}`,
-          question: `A taxpayer in ${topic} has an initial basis of $${randomAmount.toLocaleString()}. They receive a distribution of $${(randomAmount + 3000).toLocaleString()}. What is the recognized gain?`,
-          options: [
-            `$0 gain`,
-            `$3,000 Capital Gain`,
-            `$${(randomAmount + 3000).toLocaleString()} Ordinary Income`,
-            `$${randomAmount.toLocaleString()} Penalty`
+        masterQuestions.push(buildRandomizedQuestion(
+          idCounter++, chapNum, topic,
+          `A partner or shareholder in a ${topic} context has an adjusted basis of $${randBase.toLocaleString()} and receives a cash distribution of $${randDist.toLocaleString()}. What is the recognized gain?`,
+          `$${gainVal.toLocaleString()} Capital Gain`,
+          [
+            `$0 gain, adjusted basis reduces to negative $${gainVal.toLocaleString()}`,
+            `$${randDist.toLocaleString()} Ordinary Dividend Income`,
+            `$${randBase.toLocaleString()} Section 1231 Loss`
           ],
-          answer: 1,
-          explanation: `Distribution ($${(randomAmount + 3000).toLocaleString()}) exceeds basis ($${randomAmount.toLocaleString()}) by $3,000, which is recognized as capital gain.`
-        });
+          `Cash distributions reduce basis down to $0. Any cash received in excess of basis ($${randDist.toLocaleString()} - $${randBase.toLocaleString()}) results in a $${gainVal.toLocaleString()} capital gain.`
+        ));
+
+        // Realistic EA Part 2 Question 3 (IRC Technical Rules)
+        masterQuestions.push(buildRandomizedQuestion(
+          idCounter++, chapNum, topic,
+          `Under IRS guidelines for ${topic}, how are administrative elections or initial tax forms handled?`,
+          `Filed on the required IRS forms (such as Form 1065, 1120-S, 8832, or Schedule C) by the specified due date or extension.`,
+          [
+            `Elections are made automatically by verbal agreement with an IRS auditor.`,
+            `Must be notarized by a state judge prior to filing the federal tax return.`,
+            `Can only be filed once every 10 tax years without IRS permission.`
+          ],
+          `Proper tax election forms must be timely filed with the IRS.`
+        ));
       });
     }
 
@@ -183,7 +193,34 @@
     let isFlipped = false;
 
     /* ==========================================================================
-       2. SOUND & UTILITIES
+       2. LOCAL STORAGE (PROGRESS SAVING)
+       ========================================================================== */
+    function saveProgress() {
+      const state = { currentMode, currentChapter, currentIndex, strikes };
+      localStorage.setItem("ea_exam_progress", JSON.stringify(state));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem("ea_exam_progress");
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          currentMode = state.currentMode || "millionaire";
+          currentChapter = state.currentChapter || "all";
+          currentIndex = state.currentIndex || 0;
+          strikes = state.strikes !== undefined ? state.strikes : 3;
+
+          document.getElementById("modeSelect").value = currentMode;
+          document.getElementById("chapterSelect").value = currentChapter;
+          document.body.className = `theme-${currentMode}`;
+        } catch (e) {
+          console.error("Failed to load progress:", e);
+        }
+      }
+    }
+
+    /* ==========================================================================
+       3. UTILITIES & SOUND ENGINE
        ========================================================================== */
     function shuffleArray(array) {
       let arr = [...array];
@@ -233,7 +270,7 @@
     }
 
     /* ==========================================================================
-       3. CONTROLLER & RENDERERS
+       4. CONTROLLER & RENDERERS
        ========================================================================== */
     function generateFreshBatch() {
       generateQuestionPool();
@@ -243,16 +280,22 @@
     function filterChapter(chap) {
       currentChapter = chap;
       let pool = chap === "all" ? masterQuestions : masterQuestions.filter(q => q.chapter == chap);
+      // Re-shuffle order when chapter or mode changes
       activeQuestions = shuffleArray(pool);
       currentIndex = 0;
       strikes = 3;
+      saveProgress();
       render();
     }
 
     function switchMode(mode) {
       currentMode = mode;
       document.body.className = `theme-${mode}`;
-      filterChapter(currentChapter);
+      // Scramble active pool when changing modes so each game feels completely different
+      activeQuestions = shuffleArray(activeQuestions);
+      currentIndex = 0;
+      saveProgress();
+      render();
     }
 
     function render() {
@@ -260,6 +303,10 @@
       if (activeQuestions.length === 0) {
         main.innerHTML = `<p>No questions found for this chapter.</p>`;
         return;
+      }
+
+      if (currentIndex >= activeQuestions.length) {
+        currentIndex = 0;
       }
 
       const q = activeQuestions[currentIndex];
@@ -272,7 +319,7 @@
               <h3>${q.chapterName}</h3>
               <p style="margin-top: 1rem; font-size: 1.1rem; font-weight: 600;">${q.question}</p>
               <div class="options-grid">
-                ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}
+                ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})"><b>${String.fromCharCode(65 + i)}:</b> ${opt}</button>`).join('')}
               </div>
               <div class="feedback" id="fb"></div>
             </div>
@@ -289,11 +336,11 @@
       } else if (currentMode === "detective") {
         main.innerHTML = `
           <div class="detective-card">
-            <div class="folder-tab">FILE #${q.id}</div>
+            <div class="folder-tab">CASE FILE #${q.id}</div>
             <h3>🕵️ EVIDENCE CASE: ${q.chapterName}</h3>
             <p style="margin-top: 1rem; font-size: 1.1rem;">"${q.question}"</p>
             <div class="options-grid">
-              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Inspect: ${opt}</button>`).join('')}
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">Inspect ${String.fromCharCode(65 + i)}: ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
           </div>
@@ -307,7 +354,7 @@
             </div>
             <p style="font-family: monospace; font-size: 1.1rem;">> ${q.question}</p>
             <div class="options-grid">
-              ${q.options.map((opt, i) => `<button class="option-btn" style="font-family: monospace;" onclick="handleAnswer(${i})">[EXECUTE] ${opt}</button>`).join('')}
+              ${q.options.map((opt, i) => `<button class="option-btn" style="font-family: monospace;" onclick="handleAnswer(${i})">[EXECUTE ${String.fromCharCode(65 + i)}] ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
           </div>
@@ -329,7 +376,7 @@
             <h3 style="color:var(--danger);">⚠️ COMPLIANCE ALERT: ${q.chapterName}</h3>
             <p style="margin-top: 0.8rem; font-weight:600;">${q.question}</p>
             <div class="options-grid">
-              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}
+              ${q.options.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})"><b>Option ${String.fromCharCode(65 + i)}:</b> ${opt}</button>`).join('')}
             </div>
             <div class="feedback" id="fb"></div>
           </div>
@@ -349,11 +396,13 @@
           fb.innerHTML = `✓ Correct! ${q.explanation}`;
           setTimeout(() => {
             currentIndex = (currentIndex + 1) % activeQuestions.length;
+            saveProgress();
             render();
           }, 1600);
         } else {
           playSound('wrong');
           strikes--;
+          saveProgress();
           fb.style.color = "var(--danger)";
           if (strikes <= 0) {
             fb.innerHTML = `💥 3 STRIKES! Restarting chapter pool...`;
@@ -379,11 +428,14 @@
 
     function nextFC() {
       currentIndex = (currentIndex + 1) % activeQuestions.length;
+      saveProgress();
       render();
     }
 
-    // Initialize Questions & App
-    generateFreshBatch();
+    // App Startup
+    generateQuestionPool();
+    loadProgress();
+    filterChapter(currentChapter);
   </script>
 </body>
 </html>
