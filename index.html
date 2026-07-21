@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA Exam Part 2 (Businesses) Master Suite</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats-badge {
+            background-color: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        nav {
+            background-color: var(--surface);
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: thin;
+        }
+
+        .nav-tab {
+            padding: 0.8rem 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+            background-color: var(--surface-hover);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--accent); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-warning { background-color: var(--warning); color: #000; }
+
+        /* Specific Component Styles */
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .option-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 1rem;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            display: none;
+        }
+
+        /* Flashcard Styles */
+        .flashcard-container {
+            perspective: 1000px;
+            height: 250px;
+            margin: 1.5rem 0;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-radius: 12px;
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .card-front { background-color: var(--surface); color: var(--text); }
+        .card-back { background-color: #0f2942; color: var(--text); transform: rotateY(180deg); border-color: var(--primary); }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .matrix-table th, .matrix-table td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .matrix-table th { background-color: var(--surface-hover); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏛️ EA Part 2 Master Suite</h1>
+        <div class="stats-badge" id="global-stats">Mastery Progress: 0 Points Saved</div>
+    </header>
+
+    <nav>
+        <button class="nav-tab active" onclick="switchTab('detective')">🕵️ Tax Detective</button>
+        <button class="nav-tab" onclick="switchTab('millionaire')">💰 EA Millionaire</button>
+        <button class="nav-tab" onclick="switchTab('cards')">🎴 Flashcards</button>
+        <button class="nav-tab" onclick="switchTab('matrix')">🏢 Entity Matrix</button>
+        <button class="nav-tab" onclick="switchTab('basis')">🧮 Basis Tracker</button>
+        <button class="nav-tab" onclick="switchTab('sorter')">📑 Schedule Sorter</button>
+        <button class="nav-tab" onclick="switchTab('macrs')">⚡ MACRS Speed</button>
+        <button class="nav-tab" onclick="switchTab('dni')">📜 Form 1041 DNI</button>
+    </nav>
+
+    <main>
+        <!-- TAB 1: TAX DETECTIVE -->
+        <section id="detective" class="tab-panel active">
+            <div class="card">
+                <h2>🕵️ Case File #101: S-Corp Shareholder Distribution</h2>
+                <p style="margin-top:0.5rem; color:var(--text-muted);">Inspect the audit file and find the tax error made by the business owner.</p>
+                <hr style="margin: 1rem 0; border-color: var(--border);">
+                
+                <p><strong>Client Profile:</strong> Apex Services Inc. (S-Corporation with a single 100% shareholder, Dave).</p>
+                <p style="margin-top:0.5rem;"><strong>File Notes:</strong> Dave started the year with a Stock Basis of $10,000. In 2025, Apex suffered an ordinary business loss of ($15,000). Dave also took a non-taxable cash distribution of $8,000 during the year. He deducted the full $15,000 loss on his Schedule E.</p>
+
+                <h3 style="margin-top:1.5rem;">Detective Verdict: What is wrong with Dave's return?</h3>
+                <div class="option-grid">
+                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Nothing. S-Corp losses pass through fully to shareholders regardless of basis.</button>
+                    <button class="option-btn" onclick="checkDetective(true, 'det1')">Dave took distributions before applying loss rules. His loss deduction was limited to $2,000.</button>
+                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Dave must pay 15.3% Self-Employment Tax on his S-Corp cash distribution.</button>
+                    <button class="option-btn" onclick="checkDetective(false, 'det1')">Distributions are not allowed when an S-Corp incurs a net operating loss.</button>
+                </div>
+                <div id="det1-exp" class="explanation"></div>
+            </div>
+        </section>
+
+        <!-- TAB 2: EA MILLIONAIRE -->
+        <section id="millionaire" class="tab-panel">
+            <div class="card" style="text-align: center;">
+                <h2>💰 Who Wants to Be an EA Millionaire?</h2>
+                <p style="color:var(--text-muted); margin: 0.5rem 0;">Question 1 for $1,000</p>
+                
+                <h3 style="margin: 1.5rem 0;">Which of the following tax entities is subject to Corporate Income Tax at the entity level (Double Taxation)?</h3>
+
+                <div class="option-grid">
+                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">A: S-Corporation</button>
+                    <button class="option-btn" onclick="checkMillionaire(true, 'm1')">B: C-Corporation</button>
+                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">C: General Partnership</button>
+                    <button class="option-btn" onclick="checkMillionaire(false, 'm1')">D: Sole Proprietorship</button>
+                </div>
+                <div id="m1-exp" class="explanation"></div>
+            </div>
+        </section>
+
+        <!-- TAB 3: FLASHCARDS -->
+        <section id="cards" class="tab-panel">
+            <div class="card">
+                <h2>🎴 Business Tax Active Recall</h2>
+                <p style="color:var(--text-muted); margin-bottom: 1rem;">Click card to flip</p>
+
+                <div class="flashcard-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                    <div class="flashcard">
+                        <div class="card-front">
+                            <h3>What is the MACRS recovery period for General Business Equipment (like computers and office machinery)?</h3>
+                        </div>
+                        <div class="card-back">
+                            <h3>5 Years or 7 Years</h3>
+                            <p style="margin-top:0.5rem; font-size:0.9rem;">Computers/automobiles = 5 years.<br>Office furniture and general equipment = 7 years.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:1rem; justify-content:center;">
+                    <button class="btn btn-danger" onclick="addScore(0)">Needs Review</button>
+                    <button class="btn btn-success" onclick="addScore(10)">Got It Right (+10 pts)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ENTITY MATRIX -->
+        <section id="matrix" class="tab-panel">
+            <div class="card">
+                <h2>🏢 Entity Comparison Reference</h2>
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Sole Prop</th>
+                            <th>Partnership</th>
+                            <th>S-Corp</th>
+                            <th>C-Corp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Double Taxation</strong></td>
+                            <td>No</td>
+                            <td>No</td>
+                            <td>No</td>
+                            <td><strong>Yes</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Owner Limit</strong></td>
+                            <td>1</td>
+                            <td>2+</td>
+                            <td>Max 100</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SE Tax on Profits</strong></td>
+                            <td>Yes</td>
+                            <td>Yes (GPs)</td>
+                            <td>No (W2 only)</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB 5: BASIS TRACKER -->
+        <section id="basis" class="tab-panel">
+            <div class="card">
+                <h2>🧮 S-Corp Stock Basis Ordering Rule</h2>
+                <p style="margin-bottom: 1rem;">According to the IRS, in what order must adjustments be made to an S-Corporation shareholder's stock basis?</p>
+                
+                <ol style="padding-left:1.5rem; line-height:2;">
+                    <li><strong>1st:</strong> Increase for Income Items (Taxable & Tax-Exempt)</li>
+                    <li><strong>2nd:</strong> Decrease for Distributions (Non-taxable)</li>
+                    <li><strong>3rd:</strong> Decrease for Non-deductible Expenses</li>
+                    <li><strong>4th:</strong> Decrease for Loss and Deduction Items</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- TAB 6: SCHEDULE SORTER -->
+        <section id="sorter" class="tab-panel">
+            <div class="card">
+                <h2>📑 Separately Stated Items Check</h2>
+                <p>Which item must be <strong>Separately Stated</strong> on Schedule K-1 instead of calculated on Page 1 of Form 1065/1120-S?</p>
+                <div class="option-grid">
+                    <button class="option-btn" onclick="alert('Incorrect. Rent is an ordinary business expense.')">Office Rent Expense</button>
+                    <button class="option-btn" onclick="alert('Correct! Section 179 deductions are separately stated on Schedule K-1 because individual partner limits apply.'); addScore(10);">Section 179 Expense</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: MACRS SPEED -->
+        <section id="macrs" class="tab-panel">
+            <div class="card">
+                <h2>⚡ MACRS Real Property Recovery Periods</h2>
+                <p style="margin-bottom:1rem;">Match the property type to its statutory recovery period:</p>
+                <ul>
+                    <li><strong>Residential Rental Property:</strong> 27.5 Years (Straight Line)</li>
+                    <li><strong>Nonresidential Real Property:</strong> 39 Years (Straight Line)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- TAB 8: DNI WALKTHROUGH -->
+        <section id="dni" class="tab-panel">
+            <div class="card">
+                <h2>📜 Form 1041: Distributable Net Income (DNI)</h2>
+                <p>DNI limits the amount on which a beneficiary can be taxed when receiving distributions from a Trust or Estate.</p>
+                <div style="background-color:var(--surface-hover); padding:1rem; border-radius:6px; margin-top:1rem;">
+                    <strong>DNI Formula:</strong><br>
+                    Taxable Income before Distribution Deduction<br>
+                    + Personal Exemption<br>
+                    + Capital Losses (allocated to principal)<br>
+                    - Capital Gains (allocated to principal)<br>
+                    + Tax-Exempt Interest (minus expenses allocated to it)
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Use standard localStorage so Netlify deployments save user score smoothly
+        function getSavedPoints() {
+            return parseInt(localStorage.getItem('ea_mastery_points') || '0');
+        }
+
+        function updateScoreDisplay() {
+            const points = getSavedPoints();
+            document.getElementById('global-stats').innerText = `Mastery Progress: ${points} Points Saved`;
+        }
+
+        function addScore(pts) {
+            const current = getSavedPoints();
+            const newTotal = current + pts;
+            localStorage.setItem('ea_mastery_points', newTotal.toString());
+            updateScoreDisplay();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function checkDetective(isCorrect, expId) {
+            const exp = document.getElementById(expId + '-exp');
+            exp.style.display = 'block';
+            if(isCorrect) {
+                exp.innerHTML = "<strong>✅ Correct Detective Work!</strong> Under IRS rules, Basis is decreased by non-taxable distributions BEFORE loss deductions are applied. Stock basis ($10,000) - Distribution ($8,000) = $2,000 remaining basis available for losses.";
+                addScore(25);
+            } else {
+                exp.innerHTML = "<strong>❌ Incorrect.</strong> Remember: Distributions decrease basis BEFORE losses are applied!";
+            }
+        }
+
+        function checkMillionaire(isCorrect, expId) {
+            const exp = document.getElementById(expId + '-exp');
+            exp.style.display = 'block';
+            if(isCorrect) {
+                exp.innerHTML = "<strong>✅ Correct!</strong> C-Corporations pay taxes at the entity level (Form 1120), and shareholders pay taxes again on dividends received (Double Taxation).";
+                addScore(15);
+            } else {
+                exp.innerHTML = "<strong>❌ Incorrect.</strong> S-Corps, Partnerships, and Sole Proprietorships are pass-through entities.";
+            }
+        }
+
+        // Initialize score on load
+        updateScoreDisplay();
+    </script>
+</body>
+</html>
